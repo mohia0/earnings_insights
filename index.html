@@ -316,10 +316,36 @@ function calc(){
   const som=new Date(now.getFullYear(), now.getMonth(), 1); som.setHours(0,0,0,0);
   const hoursMonth=(now-som)/3600000; $('sinceMonth').textContent=`${fmt(perHour*hoursMonth)} ${outC}`;
 
+  // fun facts (use per-minute/second bases)
+  const perSec   = total/Math.max((now-start)/1000, 1e-6);
+  const perMin   = perSec*60;
+  const f = (m)=>fmt(perMin*m)+' '+outC;
+  $('perMatch').textContent    = f(90);
+  $('perEpisode').textContent  = f(45);
+  $('perCoffee').textContent   = f(7);
+  $('perShower').textContent   = f(8);
+  $('perSong').textContent     = f(3.5);
+  $('perPenalty').textContent  = f(5);
+  $('perTraffic').textContent  = fmt(perSec*90)+' '+outC;
+  $('perEspresso').textContent = fmt(perSec*30)+' '+outC;
+  $('perDiaper').textContent   = f(2);
+  $('perVoice').textContent    = f(1);
+  $('perMicrowave').textContent= f(3);
+  $('perBrush').textContent    = f(2.5);
+
   renderOtherCurrencies(totalRaw, inC);
 }
 
-function renderOtherCurrencies(totalRaw, inC){ const list=$('otherList'); list.innerHTML=''; CURRENCIES.filter(c=>c!==inC).forEach(c=>{ const val = convert(totalRaw, inC, c); const div=document.createElement('div'); div.className='other'; div.innerHTML=`<div class="c">${c}</div><div class="n">${fmt(val)}</div>`; list.appendChild(div); }); }
+function renderOtherCurrencies(totalRaw, inC){
+  const list=$('otherList'); list.innerHTML='';
+  CURRENCIES.filter(c=>c!==inC).forEach(c=>{
+    const val = convert(totalRaw, inC, c);
+    const div=document.createElement('div');
+    div.className='other';
+    div.innerHTML=`<div class="c">${c}</div><div class="n">${fmt(val)}</div>`;
+    list.appendChild(div);
+  });
+}
 
 // ---------- charts engine (hi-DPI + colors + tooltips + data labels) ----------
 function setupCanvas(c){ const dpr=window.devicePixelRatio||1; const w=c.clientWidth; const h=c.clientHeight; c.width=Math.floor(w*dpr); c.height=Math.floor(h*dpr); const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return ctx; }
@@ -357,25 +383,114 @@ function barChart(canvas, data, labels, colorIdx=2){
   ctx.fillStyle="#9a9a9a"; ctx.font="12px system-ui"; labels.forEach((lab,i)=>{ const x=pad + (i+0.2)*(w-2*pad)/data.length; ctx.fillText(lab, x, h-8); });
 }
 
-function histChart(canvas, data, bins=6, colorIdx=4){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h); const min=Math.min(...data), max=Math.max(...data); const width=(max-min)/bins || 1; const counts=new Array(bins).fill(0); data.forEach(v=>{ let idx=Math.floor((v-min)/width); if(idx>=bins) idx=bins-1; if(idx<0) idx=0; counts[idx]++; }); const maxC=Math.max(...counts,1); const barW=(w-2*pad)/bins*0.7; ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._bars=[]; counts.forEach((c,i)=>{ const x=pad + (i+0.15)*(w-2*pad)/bins; const hgt=(c/maxC)*(h-2*pad); const y=h-pad-hgt; ctx.fillRect(x, y, barW, hgt); drawValue(ctx, x+barW/2, y, c); canvas._bars.push({x,y,w:barW,h:hgt,v:c,label:`Bin ${i+1}`}); }); }
+function histChart(canvas, data, bins=6, colorIdx=4){
+  const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h);
+  const min=Math.min(...data), max=Math.max(...data); const width=(max-min)/bins || 1; const counts=new Array(bins).fill(0);
+  data.forEach(v=>{ let idx=Math.floor((v-min)/width); if(idx>=bins) idx=bins-1; if(idx<0) idx=0; counts[idx]++; });
+  const maxC=Math.max(...counts,1); const barW=(w-2*pad)/bins*0.7;
+  ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); }
+  ctx.fillStyle=PAL[colorIdx%PAL.length];
+  canvas._bars=[];
+  counts.forEach((c,i)=>{ const x=pad + (i+0.15)*(w-2*pad)/bins; const hgt=(c/maxC)*(h-2*pad); const y=h-pad-hgt; ctx.fillRect(x, y, barW, hgt); drawValue(ctx, x+barW/2, y, c); canvas._bars.push({x,y,w:barW,h:hgt,v:c,label:`Bin ${i+1}`}); });
+}
 
-function pieChart(canvas, data){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight; ctx.clearRect(0,0,w,h); const cx=w/2, cy=h/2; const r=Math.min(w,h)/2 - 20; const sum=data.reduce((a,b)=>a+b,0)||1; let a0=-Math.PI/2; canvas._slices=[]; data.forEach((v,i)=>{ const a1=a0 + 2*Math.PI*(v/sum); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,a0,a1); ctx.closePath(); ctx.fillStyle=PAL[i%PAL.length]; ctx.fill(); ctx.strokeStyle="#222"; ctx.stroke(); // label
-    const mid=(a0+a1)/2; const lx=cx+Math.cos(mid)*(r*0.62), ly=cy+Math.sin(mid)*(r*0.62); const pct=((v/sum)*100).toFixed(1)+'%'; drawValue(ctx, lx, ly, pct); canvas._slices.push({a0,a1,value:v,pct}); a0=a1; }); }
+function pieChart(canvas, data){
+  const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight; ctx.clearRect(0,0,w,h);
+  const cx=w/2, cy=h/2; const r=Math.min(w,h)/2 - 20; const sum=data.reduce((a,b)=>a+b,0)||1; let a0=-Math.PI/2; canvas._slices=[];
+  data.forEach((v,i)=>{
+    const a1=a0 + 2*Math.PI*(v/sum); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,a0,a1); ctx.closePath();
+    ctx.fillStyle=PAL[i%PAL.length]; ctx.fill(); ctx.strokeStyle="#222"; ctx.stroke();
+    const mid=(a0+a1)/2; const lx=cx+Math.cos(mid)*(r*0.62), ly=cy+Math.sin(mid)*(r*0.62);
+    const pct=((v/sum)*100).toFixed(1)+'%'; drawValue(ctx, lx, ly, pct);
+    canvas._slices.push({a0,a1,value:v,pct}); a0=a1;
+  });
+}
 
-function scatterChart(canvas, xs, ys, colorIdx=6){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h); const xmin=Math.min(...xs), xmax=Math.max(...xs), ymin=Math.min(...ys), ymax=Math.max(...ys); const x=(v)=> pad + ((v-xmin)/(xmax-xmin||1))*(w-2*pad), y=(v)=> h-pad - ((v-ymin)/(ymax-ymin||1))*(h-2*pad); ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._points=[]; xs.forEach((vx,i)=>{ const px=x(vx), py=y(ys[i]); ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill(); drawValue(ctx, px, py, ys[i].toFixed(1)); canvas._points.push({x:px,y:py,label:vx,v:ys[i]}); }); }
+function scatterChart(canvas, xs, ys, colorIdx=6){
+  const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h);
+  const xmin=Math.min(...xs), xmax=Math.max(...xs), ymin=Math.min(...ys), ymax=Math.max(...ys);
+  const x=(v)=> pad + ((v-xmin)/(xmax-xmin||1))*(w-2*pad), y=(v)=> h-pad - ((v-ymin)/(ymax-ymin||1))*(h-2*pad);
+  ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); }
+  ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._points=[];
+  xs.forEach((vx,i)=>{ const px=x(vx), py=y(ys[i]); ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill(); drawValue(ctx, px, py, ys[i].toFixed(1)); canvas._points.push({x:px,y:py,label:vx,v:ys[i]}); });
+}
 
 // ---------- tooltips binding ----------
-function bindTooltip(canvas, accessor){ const tt=$('tooltip'); canvas.addEventListener('mousemove', (e)=>{ const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const hit=accessor(canvas,x,y); if(hit){ tt.style.display='block'; tt.style.left=e.clientX+'px'; tt.style.top=e.clientY+'px'; tt.innerHTML = `<b>${hit.label}</b><br/>${fmt(hit.v)}${hit.suffix||''}`; } else { tt.style.display='none'; } }); canvas.addEventListener('mouseleave', ()=>{ $('tooltip').style.display='none'; }); }
+function bindTooltip(canvas, accessor){
+  const tt=$('tooltip');
+  canvas.addEventListener('mousemove', (e)=>{
+    const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
+    const hit=accessor(canvas,x,y);
+    if(hit){ tt.style.display='block'; tt.style.left=e.clientX+'px'; tt.style.top=e.clientY+'px'; tt.innerHTML = `<b>${hit.label}</b><br/>${fmt(hit.v)}${hit.suffix||''}`; }
+    else { tt.style.display='none'; }
+  });
+  canvas.addEventListener('mouseleave', ()=>{ $('tooltip').style.display='none'; });
+}
 
 function nearPoint(points,x,y){ let m=null,d2=25; points.forEach(p=>{ const dd=(p.x-x)*(p.x-x)+(p.y-y)*(p.y-y); if(dd<d2){ m=p; d2=dd; } }); return m; }
 function insideBar(bars,x,y){ for(const b of bars){ if(x>=b.x && x<=b.x+b.w && y>=b.y && y<=b.y+b.h) return b; } return null; }
-function insideSlice(canvas,x,y){ if(!canvas._slices) return null; const r=Math.min(canvas.clientWidth,canvas.clientHeight)/2 - 20; const cx=canvas.clientWidth/2, cy=canvas.clientHeight/2; const dx=x-cx, dy=y-cy; const dist=Math.sqrt(dx*dx+dy*dy); if(dist>r) return null; let ang=Math.atan2(dy,dx); if(ang< -Math.PI/2) ang+=2*Math.PI; for(const s of canvas._slices){ if(ang>=s.a0 && ang<=s.a1) return {label:'Slice', v:s.value, suffix:` (${s.pct})`}; } return null; }
+function insideSlice(canvas,x,y){
+  if(!canvas._slices) return null;
+  const r=Math.min(canvas.clientWidth,canvas.clientHeight)/2 - 20; const cx=canvas.clientWidth/2, cy=canvas.clientHeight/2;
+  const dx=x-cx, dy=y-cy; const dist=Math.sqrt(dx*dx+dy*dy); if(dist>r) return null;
+  let ang=Math.atan2(dy,dx); if(ang< -Math.PI/2) ang+=2*Math.PI;
+  for(const s of canvas._slices){ if(ang>=s.a0 && ang<=s.a1) return {label:'Slice', v:s.value, suffix:` (${s.pct})`}; }
+  return null;
+}
 
 // ---------- yearly insights ----------
-function statsYears(arr){ const n=arr.length; if(!n) return null; const vals = arr.map(o=>o.value); const sum=vals.reduce((a,b)=>a+b,0); const avg=sum/n; const sorted=[...vals].sort((a,b)=>a-b); const median = n%2? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2; let bestI=0, worstI=0; for(let i=1;i<n;i++){ if(vals[i]>vals[bestI]) bestI=i; if(vals[i]<vals[worstI]) worstI=i; } const variance = vals.reduce((a,b)=>a+(b-avg)*(b-avg),0)/n; const sd = Math.sqrt(variance); const cv = avg? sd/avg : 0; const first = vals[0]; const last = vals[n-1]; const yearsSpan = Math.max(arr[n-1].year - arr[0].year, n-1); const cagr = (yearsSpan>0 && first>0)? Math.pow(last/first, 1/yearsSpan)-1 : 0; const yoy = vals.map((v,i)=> i===0? 0 : (vals[i-1]===0? 0 : (v/vals[i-1]-1)) ); const hitRate = yoy.slice(1).filter(g=>g>0).length / Math.max(n-1,1); let peak=vals[0], mdd=0; const ddSeries=[0]; for(let i=1;i<n;i++){ peak=Math.max(peak, vals[i-1]); const dd = peak? (vals[i]-peak)/peak : 0; mdd = Math.min(mdd, dd); ddSeries.push(dd); } const rollVol=[]; for(let i=0;i<n;i++){ const s=vals.slice(Math.max(0,i-2), i+1); const mu=s.reduce((a,b)=>a+b,0)/s.length; const vv=s.reduce((a,b)=>a+(b-mu)*(b-mu),0)/s.length; rollVol.push(Math.sqrt(vv)); } return {sum,avg,median,bestI,worstI,cv,cagr,yoy,hitRate,mdd,ddSeries,rollVol,last,first}; }
+function statsYears(arr){
+  const n=arr.length; if(!n) return null;
+  const vals = arr.map(o=>o.value);
+  const sum=vals.reduce((a,b)=>a+b,0);
+  const avg=sum/n;
+  const sorted=[...vals].sort((a,b)=>a-b);
+  const median = n%2? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2;
+  let bestI=0, worstI=0; for(let i=1;i<n;i++){ if(vals[i]>vals[bestI]) bestI=i; if(vals[i]<vals[worstI]) worstI=i; }
+  const variance = vals.reduce((a,b)=>a+(b-avg)*(b-avg),0)/n;
+  const sd = Math.sqrt(variance);
+  const cv = avg? sd/avg : 0;
+  const first = vals[0]; const last = vals[n-1];
+  const yearsSpan = Math.max(arr[n-1].year - arr[0].year, n-1);
+  const cagr = (yearsSpan>0 && first>0)? Math.pow(last/first, 1/yearsSpan)-1 : 0;
+  const yoy = vals.map((v,i)=> i===0? 0 : (vals[i-1]===0? 0 : (v/vals[i-1]-1)) );
+  const hitRate = yoy.slice(1).filter(g=>g>0).length / Math.max(n-1,1);
+  let peak=vals[0], mdd=0; const ddSeries=[0];
+  for(let i=1;i<n;i++){ peak=Math.max(peak, vals[i-1]); const dd = peak? (vals[i]-peak)/peak : 0; mdd = Math.min(mdd, dd); ddSeries.push(dd); }
+  const rollVol=[]; for(let i=0;i<n;i++){ const s=vals.slice(Math.max(0,i-2), i+1); const mu=s.reduce((a,b)=>a+b,0)/s.length; const vv=s.reduce((a,b)=>a+(b-mu)*(b-mu),0)/s.length; rollVol.push(Math.sqrt(vv)); }
+  return {sum,avg,median,bestI,worstI,cv,cagr,yoy,hitRate,mdd,ddSeries,rollVol,last,first};
+}
 
-function drawYearInsights(){ const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; if(years.length===0){ ['yYears','yTotal','yAvg','yMedian','yBest','yWorst','yCAGR','yCV','yHit','yMDD','yLastVsAvg','yLastYoY'].forEach(id=>$(id).textContent='—'); ['chartYLine','chartYoY','chartYCum','chartRoll','chartHist','chartPie','chartDD','chartVol','chartScatter','chartLastVs'].forEach(id=>{ const c=$(id); const ctx=setupCanvas(c); ctx.clearRect(0,0,c.clientWidth,c.clientHeight); }); return; } const series = years.slice().sort((a,b)=>a.year-b.year); const conv = series.map(o=> ({year:o.year, value: convert(o.value, inC, outC)})); const labels = conv.map(o=>String(o.year)); const vals = conv.map(o=>o.value); const st = statsYears(conv); $('yYears').textContent = conv.length; $('yTotal').textContent = `${fmt(st.sum)} ${outC}`; $('yAvg').textContent = `${fmt(st.avg)} ${outC}`; $('yMedian').textContent= `${fmt(st.median)} ${outC}`; $('yBest').textContent = `${labels[st.bestI]} · ${fmt(vals[st.bestI])} ${outC}`; $('yWorst').textContent= `${labels[st.worstI]} · ${fmt(vals[st.worstI])} ${outC}`; $('yCAGR').textContent = `${(st.cagr*100).toFixed(2)}%`; $('yCV').textContent = `${(st.cv*100).toFixed(1)}%`; $('yHit').textContent = `${(st.hitRate*100).toFixed(0)}% up years`; $('yMDD').textContent = `${(st.mdd*100).toFixed(1)}%`; const lastVsAvg = st.avg? (st.last/st.avg - 1) : 0; $('yLastVsAvg').textContent = `${(lastVsAvg*100).toFixed(1)}%`; const lastYoY = st.yoy.length>1? st.yoy[st.yoy.length-1] : 0; $('yLastYoY').textContent = `${(lastYoY*100).toFixed(1)}%`;
-  // charts with tooltips + data labels
+function drawYearInsights(){
+  const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD';
+  if(years.length===0){
+    ['yYears','yTotal','yAvg','yMedian','yBest','yWorst','yCAGR','yCV','yHit','yMDD','yLastVsAvg','yLastYoY'].forEach(id=>$(id).textContent='—');
+    ['chartYLine','chartYoY','chartYCum','chartRoll','chartHist','chartPie','chartDD','chartVol','chartScatter','chartLastVs'].forEach(id=>{
+      const c=$(id); const ctx=setupCanvas(c); ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
+    });
+    return;
+  }
+  const series = years.slice().sort((a,b)=>a.year-b.year);
+  const conv = series.map(o=> ({year:o.year, value: convert(o.value, inC, outC)}));
+  const labels = conv.map(o=>String(o.year));
+  const vals = conv.map(o=>o.value);
+  const st = statsYears(conv);
+
+  // metrics
+  $('yYears').textContent = conv.length;
+  $('yTotal').textContent = `${fmt(st.sum)} ${outC}`;
+  $('yAvg').textContent   = `${fmt(st.avg)} ${outC}`;
+  $('yMedian').textContent= `${fmt(st.median)} ${outC}`;
+  $('yBest').textContent  = `${labels[st.bestI]} · ${fmt(vals[st.bestI])} ${outC}`;
+  $('yWorst').textContent = `${labels[st.worstI]} · ${fmt(vals[st.worstI])} ${outC}`;
+  $('yCAGR').textContent  = `${(st.cagr*100).toFixed(2)}%`;
+  $('yCV').textContent    = `${(st.cv*100).toFixed(1)}%`;
+  $('yHit').textContent   = `${(st.hitRate*100).toFixed(0)}% up years`;
+  $('yMDD').textContent   = `${(st.mdd*100).toFixed(1)}%`;
+  const lastVsAvg = st.avg? (st.last/st.avg - 1) : 0; $('yLastVsAvg').textContent = `${(lastVsAvg*100).toFixed(1)}%`;
+  const lastYoY = st.yoy.length>1? st.yoy[st.yoy.length-1] : 0; $('yLastYoY').textContent = `${(lastYoY*100).toFixed(1)}%`;
+
+  // charts with tooltips + labels
   const c1=$('chartYLine'); lineChart(c1, vals, labels, 0); bindTooltip(c1,(cv,x,y)=> nearPoint(cv._points||[],x,y));
   const c2=$('chartYoY'); barChart(c2, st.yoy.map(v=>v*100), labels, 2); bindTooltip(c2,(cv,x,y)=> insideBar(cv._bars||[],x,y));
   const cum=[]; vals.reduce((a,b,i)=> cum[i]=a+b, 0); const c3=$('chartYCum'); lineChart(c3, cum, labels, 1); bindTooltip(c3,(cv,x,y)=> nearPoint(cv._points||[],x,y));
@@ -391,15 +506,22 @@ function drawYearInsights(){ const inC=$('inCur').value||'USD'; const outC=$('ou
 // ---------- wiring & tabs ----------
 function wire(){
   ['total'].forEach(id=>{ $(id).addEventListener('input', ()=>{ calc(); drawYearInsights(); save(); }); });
-  // currency selects use the setters for global consistency
   $('inCur').addEventListener('change', ()=> setInputCurrency($('inCur').value));
   $('outCur').addEventListener('change', ()=> setDisplayCurrency($('outCur').value));
 
   $('openRates').addEventListener('click', ()=>{ updateRatesUI(); $('ratesModal').classList.add('open'); });
   $('cancelRates').addEventListener('click', ()=>$('ratesModal').classList.remove('open'));
-  $('saveRates').addEventListener('click', ()=>{ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ exchangeRates[k]=parseFloat($(k.toLowerCase()+"Rate").value)||exchangeRates[k]; }); $('ratesModal').classList.remove('open'); save(); calc(); drawYearInsights(); });
+  $('saveRates').addEventListener('click', ()=>{
+    ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ exchangeRates[k]=parseFloat($(k.toLowerCase()+"Rate").value)||exchangeRates[k]; });
+    $('ratesModal').classList.remove('open'); save(); calc(); drawYearInsights();
+  });
 
-  $('addRow').addEventListener('click', ()=>{ const y = years.length? (Math.max(...years.map(r=>r.year))+1) : (new Date().getFullYear()); years.push({year:y, value:0}); renderYears(); drawYearInsights(); save(); });
+  $('addRow').addEventListener('click', ()=>{
+    const y = years.length? (Math.max(...years.map(r=>r.year))+1) : (new Date().getFullYear());
+    years.push({year:y, value:0}); renderYears(); drawYearInsights(); save();
+  });
+
+  // Sample data you requested
   $('loadSample').addEventListener('click', ()=>{
     years = [
       {year:2020, value:8037},
@@ -412,13 +534,32 @@ function wire(){
     renderYears(); drawYearInsights(); save();
   });
 
-  $('tabDash').addEventListener('click', ()=>{ $('tabDash').classList.add('active'); $('tabInsights').classList.remove('active'); $('panelDash').style.display='block'; $('panelInsights').style.display='none'; });
-  $('tabInsights').addEventListener('click', ()=>{ $('tabInsights').classList.add('active'); $('tabDash').classList.remove('active'); $('panelDash').style.display='none'; $('panelInsights').style.display='block'; drawYearInsights(); });
+  $('tabDash').addEventListener('click', ()=>{
+    $('tabDash').classList.add('active'); $('tabInsights').classList.remove('active');
+    $('panelDash').style.display='block'; $('panelInsights').style.display='none';
+  });
+  $('tabInsights').addEventListener('click', ()=>{
+    $('tabInsights').classList.add('active'); $('tabDash').classList.remove('active');
+    $('panelDash').style.display='none'; $('panelInsights').style.display='block'; drawYearInsights();
+  });
 }
 
-function updateRatesUI(){ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ $(k.toLowerCase()+"Rate").value = exchangeRates[k]; }); }
+function updateRatesUI(){
+  ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ $(k.toLowerCase()+"Rate").value = exchangeRates[k]; });
+}
 
-(function init(){ ['inCur','outCur'].forEach(id=>{ const el=$(id); el.innerHTML = CURRENCIES.map(c=>`<option value="${c}">${c}</option>`).join(''); }); if(!$('inCur').value) $('inCur').value='USD'; if(!$('outCur').value) $('outCur').value='USD'; load(); wire(); calc(); renderYears(); drawYearInsights(); const now=new Date(); const start=new Date(now.getFullYear(),0,1); start.setHours(0,0,0,0); $('dateInfo').textContent=`Day ${Math.floor((now-start)/86400000)+1} · ${now.getFullYear()}`; })();
+(function init(){
+  ['inCur','outCur'].forEach(id=>{
+    const el=$(id); el.innerHTML = CURRENCIES.map(c=>`<option value="${c}">${c}</option>`).join('');
+  });
+  if(!$('inCur').value) $('inCur').value='USD';
+  if(!$('outCur').value) $('outCur').value='USD';
+
+  load(); wire(); calc(); renderYears(); drawYearInsights();
+
+  const now=new Date(); const start=new Date(now.getFullYear(),0,1); start.setHours(0,0,0,0);
+  $('dateInfo').textContent=`Day ${Math.floor((now-start)/86400000)+1} · ${now.getFullYear()}`;
+})();
 </script>
 </body>
 </html>
