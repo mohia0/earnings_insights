@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<!DOCTYPE html><html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,255 +7,239 @@
     :root{
       --bg:#0a0a0a; --surface:#0f0f0f; --muted:#9a9a9a; --text:#f6f6f6; --line:#1e1e1e; --accent:#ebebeb; --chip:#151515;
       --c1:#7dd3fc; --c2:#a7f3d0; --c3:#fca5a5; --c4:#fde68a; --c5:#c4b5fd; --c6:#f9a8d4; --c7:#93c5fd; --c8:#6ee7b7; --c9:#fcd34d; --c10:#fdba74;
-      --tooltip:#111; --tooltipBorder:#2a2a2a; --sp:14px;
+      --tooltip:#111; --tooltipBorder:#2a2a2a;
+      --sp:14px; --sp-lg:18px;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,system-ui,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:1180px;margin:0 auto;padding:24px;display:grid;gap:20px}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px;display:grid;gap:var(--sp-lg)}.head{display:flex;gap:12px;align-items:center}
+.title{font-size:18px;font-weight:800}
+.hint{color:var(--muted);font-size:13px}
+.chip{padding:8px 10px;background:var(--chip);border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}
+.right{margin-left:auto}
 
-    .head{display:flex;gap:14px;align-items:center}
-    .title{font-size:18px;font-weight:800}
-    .hint{color:var(--muted);font-size:13px}
-    .right{margin-left:auto}
+/* Lang toggle */
+#langToggle{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#0c0c0c;color:#f6f6f6;font-weight:800;cursor:pointer}
 
-    /* Language switch (replaces day chip) */
-    .lang-switch{display:flex;gap:8px;margin-left:auto}
-    .seg{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#0c0c0c;color:#f6f6f6;font-weight:700;cursor:pointer}
-    .seg.active{background:var(--accent);color:#000}
+/* Tabs */
+.tabs{display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:2}
+.tabbtn{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:#0c0c0c;color:#f6f6f6;cursor:pointer;font-weight:700;transition:transform .12s ease}
+.tabbtn:hover{transform:translateY(-1px)}
+.tabbtn.active{background:var(--accent);color:#000;box-shadow:0 0 0 2px #000 inset}
+.tabspace{background:rgba(10,10,10,.92);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:6px}
 
-    /* Tabs */
-    .tabs{display:flex;gap:10px;align-items:center;position:sticky;top:0;z-index:2}
-    .tabbtn{padding:12px 16px;border:1px solid var(--line);border-radius:999px;background:#0c0c0c;color:#f6f6f6;cursor:pointer;font-weight:700;transition:transform .12s ease}
-    .tabbtn:hover{transform:translateY(-1px)}
-    .tabbtn.active{background:var(--accent);color:#000;box-shadow:0 0 0 2px #000 inset}
-    .tabspace{background:rgba(10,10,10,.92);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:6px}
+/* Inputs */
+.dock{background:rgba(10,10,10,.92);border:1px solid var(--line);border-radius:14px;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--sp)}
+.c-2{grid-column:span 2}.c-3{grid-column:span 3}.c-4{grid-column:span 4}.c-5{grid-column:span 5}.c-6{grid-column:span 6}.c-7{grid-column:span 7}.c-8{grid-column:span 8}.c-12{grid-column:span 12}
+@media (max-width:900px){.c-8,.c-7,.c-6,.c-5,.c-4,.c-3,.c-2,.c-12{grid-column:span 12}.grid{gap:16px}}
+label{font-size:11px;color:var(--muted);display:block;margin-bottom:6px}
+input,select,button{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0b0b0b;color:#f6f6f6}
+.btn{background:var(--accent);color:#000;border:none;font-weight:700;cursor:pointer}
+.btn:active{transform:translateY(1px)}
 
-    /* Inputs */
-    .dock{background:rgba(10,10,10,.92);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--sp)}
-    .c-2{grid-column:span 2}.c-3{grid-column:span 3}.c-4{grid-column:span 4}.c-5{grid-column:span 5}.c-6{grid-column:span 6}.c-7{grid-column:span 7}.c-8{grid-column:span 8}.c-12{grid-column:span 12}
-    @media (max-width:900px){.grid{gap:16px} .c-8,.c-7,.c-6,.c-5,.c-4,.c-3,.c-2,.c-12{grid-column:span 12}}
-    label{font-size:11px;color:var(--muted);display:block;margin-bottom:6px}
-    input,select,button{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0b0b0b;color:#f6f6f6}
-    .btn{background:var(--accent);color:#000;border:none;font-weight:700;cursor:pointer}
-    .btn:active{transform:translateY(1px)}
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--sp)}
+@media (max-width:1120px){.cards{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.k{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.v{font-size:24px;font-weight:800;margin-top:6px}
 
-    /* Cards */
-    .cards{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--sp)}
-    @media (max-width:1120px){.cards{grid-template-columns:repeat(3,1fr)}}
-    @media (max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:420px){.cards{grid-template-columns:1fr}}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
-    .k{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-    .v{font-size:24px;font-weight:800;margin-top:8px}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:var(--sp)}
+.section h2{margin:0 0 8px;font-size:12px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.bar{height:10px;border:1px solid var(--line);border-radius:10px;background:#121212;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
 
-    .section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
-    .section h2{margin:0 0 10px;font-size:12px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
-    .bar{height:10px;border:1px solid var(--line);border-radius:10px;background:#121212;overflow:hidden}
-    .bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp)}
+@media (max-width:900px){.facts{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.facts{grid-template-columns:1fr}}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.fact .t{font-weight:700}
+.fact .d{color:var(--muted);font-size:13px;margin-top:2px}
 
-    .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp)}
-    @media (max-width:900px){.facts{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:600px){.facts{grid-template-columns:1fr}}
-    .fact{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
-    .fact .t{font-weight:700}
-    .fact .d{color:var(--muted);font-size:13px;margin-top:4px}
+.other-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp)}
+@media (max-width:900px){.other-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:600px){.other-grid{grid-template-columns:repeat(2,1fr)}}
+.other{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.other .c{font-size:11px;color:var(--muted)}
+.other .n{font-size:16px;font-weight:700;margin-top:4px}
 
-    .other-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-    @media (max-width:900px){.other-grid{grid-template-columns:repeat(3,1fr)}}
-    @media (max-width:600px){.other-grid{grid-template-columns:repeat(2,1fr)}}
-    .other{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
-    .other .c{font-size:11px;color:var(--muted)}
-    .other .n{font-size:16px;font-weight:700;margin-top:6px}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-content{width:min(720px,92vw);background:#0c0c0c;border:1px solid var(--line);border-radius:16px;padding:16px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.row{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp)}
 
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px}
-    .modal.open{display:flex}
-    .modal-content{width:min(760px,96vw);background:#0c0c0c;border:1px solid var(--line);border-radius:16px;padding:18px}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-    .row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+/* Canvas */
+canvas{width:100%;height:280px;border:1px solid var(--line);border-radius:12px;background:#0b0b0b;image-rendering:crisp-edges}
+.mini{height:200px}
 
-    /* Canvas */
-    canvas{width:100%;height:280px;border:1px solid var(--line);border-radius:12px;background:#0b0b0b;image-rendering:crisp-edges}
-    .mini{height:200px}
+/* Tooltip */
+.tt{position:fixed;pointer-events:none;background:var(--tooltip);border:1px solid var(--tooltipBorder);padding:8px 10px;border-radius:10px;color:#eee;font-size:12px;transform:translate(-50%,-120%);display:none;white-space:nowrap}
 
-    /* Tooltip */
-    .tt{position:fixed;pointer-events:none;background:var(--tooltip);border:1px solid var(--tooltipBorder);padding:8px 10px;border-radius:10px;color:#eee;font-size:12px;transform:translate(-50%,-120%);display:none;white-space:nowrap}
+/* RTL overrides */
+html.rtl{direction:rtl}
+html.rtl .right{margin-left:0;margin-right:auto}
+html.rtl .tabs{flex-direction:row-reverse}
+html.rtl .grid{direction:rtl}
+html.rtl label, html.rtl .k, html.rtl .hint, html.rtl .t, html.rtl .d {text-align:right}
 
-    /* RTL tweaks */
-    [dir="rtl"] .head{flex-direction:row-reverse}
-    [dir="rtl"] .right{margin-right:auto;margin-left:0}
-    [dir="rtl"] .k,[dir="rtl"] .v,[dir="rtl"] label,[dir="rtl"] .hint,[dir="rtl"] .fact .d{text-align:start}
-    [dir="rtl"] .tabs{flex-direction:row-reverse}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="head">
-      <div class="title" data-i18n="title">Super Earnings Pace</div>
-      <div class="hint" data-i18n="subtitle">Manual rates · clean pace · smart + fun facts</div>
-      <div class="lang-switch right">
-        <button class="seg" id="btnAr">عربي</button>
-        <button class="seg active" id="btnEn">EN</button>
+      <div class="title" id="t_title">Super Earnings Pace</div>
+      <div class="hint" id="t_sub">Manual rates · clean pace · smart + fun facts</div>
+      <span class="right"></span>
+      <button id="langToggle" class="chip">🇪🇬 عربي / EN</button>
+    </div><!-- Tabs -->
+<div class="tabs">
+  <button class="tabbtn active" id="tabDash">Dashboard</button>
+  <button class="tabbtn" id="tabInsights">Insights Lab</button>
+</div>
+
+<!-- DASHBOARD TAB -->
+<div class="tabspace" id="panelDash">
+  <div class="dock">
+    <div class="grid">
+      <div class="c-4">
+        <label id="t_total_label">Total earned to date</label>
+        <input id="total" type="number" min="0" step="0.01" placeholder="12500.00"/>
       </div>
+      <div class="c-3">
+        <label id="t_incur">Input currency</label>
+        <select id="inCur"></select>
+      </div>
+      <div class="c-3">
+        <label id="t_outcur">Display currency</label>
+        <select id="outCur"></select>
+      </div>
+      <div class="c-2"><label>&nbsp;</label><button class="btn" id="openRates">Rates</button></div>
     </div>
+  </div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tabbtn active" id="tabDash" data-i18n="tabDash">Dashboard</button>
-      <button class="tabbtn" id="tabInsights" data-i18n="tabInsights">Insights Lab</button>
+  <!-- KPIs -->
+  <div class="cards">
+    <div class="card"><div class="k" id="t_persec">Per second</div><div class="v" id="perSec">0.00</div></div>
+    <div class="card"><div class="k" id="t_permin">Per minute</div><div class="v" id="perMin">0.00</div></div>
+    <div class="card"><div class="k" id="t_perhr">Per hour</div><div class="v" id="perHr">0.00</div></div>
+    <div class="card"><div class="k" id="t_perday">Per day</div><div class="v" id="perDay">0.00</div></div>
+    <div class="card"><div class="k" id="t_perwk">Per week</div><div class="v" id="perWk">0.00</div></div>
+    <div class="card"><div class="k" id="t_permon">Per month (avg)</div><div class="v" id="perMon">0.00</div></div>
+  </div>
+
+  <!-- Year progress -->
+  <div class="section">
+    <h2 id="t_yearprog">Year progress</h2>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="bar" style="flex:1"><span id="yBar"></span></div>
+      <span class="chip" id="yPct">0%</span>
+      <span class="chip" id="elapsedLabel">day 0 of 365</span>
     </div>
+  </div>
 
-    <!-- DASHBOARD TAB -->
-    <div class="tabspace" id="panelDash">
-      <div class="dock">
-        <div class="grid">
-          <div class="c-4">
-            <label data-i18n="lblTotal">Total earned to date</label>
-            <input id="total" type="number" min="0" step="0.01" placeholder="12500.00"/>
-          </div>
-          <div class="c-3">
-            <label data-i18n="lblInCur">Input currency</label>
-            <select id="inCur"></select>
-          </div>
-          <div class="c-3">
-            <label data-i18n="lblOutCur">Display currency</label>
-            <select id="outCur"></select>
-          </div>
-          <div class="c-2"><label>&nbsp;</label><button class="btn" id="openRates" data-i18n="btnRates">Rates</button></div>
-        </div>
-      </div>
+  <!-- Earned until now in OTHER currencies (not input) -->
+  <div class="section">
+    <h2 id="t_othercurr">Earned until now — other currencies</h2>
+    <div class="other-grid" id="otherList"></div>
+  </div>
 
-      <!-- KPIs -->
-      <div class="cards">
-        <div class="card"><div class="k" data-i18n="kpiPerSec">Per second</div><div class="v" id="perSec">0.00</div></div>
-        <div class="card"><div class="k" data-i18n="kpiPerMin">Per minute</div><div class="v" id="perMin">0.00</div></div>
-        <div class="card"><div class="k" data-i18n="kpiPerHr">Per hour</div><div class="v" id="perHr">0.00</div></div>
-        <div class="card"><div class="k" data-i18n="kpiPerDay">Per day</div><div class="v" id="perDay">0.00</div></div>
-        <div class="card"><div class="k" data-i18n="kpiPerWk">Per week</div><div class="v" id="perWk">0.00</div></div>
-        <div class="card"><div class="k" data-i18n="kpiPerMon">Per month (avg)</div><div class="v" id="perMon">0.00</div></div>
-      </div>
-
-      <!-- Year progress -->
-      <div class="section">
-        <h2 data-i18n="yearProgress">Year progress</h2>
-        <div style="display:flex;gap:14px;align-items:center">
-          <div class="bar" style="flex:1"><span id="yBar"></span></div>
-          <span class="chip" id="yPct">0%</span>
-          <span class="chip" id="elapsedLabel">—</span>
-        </div>
-      </div>
-
-      <!-- Earned until now in OTHER currencies (not input) -->
-      <div class="section">
-        <h2 data-i18n="earnedOther">Earned until now — other currencies</h2>
-        <div class="other-grid" id="otherList"></div>
-      </div>
-
-      <!-- Smart facts -->
-      <div class="section">
-        <h2 data-i18n="smartFacts">Smart facts</h2>
-        <div class="facts">
-          <div class="fact"><div class="t" data-i18n="projYear">Projected year total</div><div class="d" id="proj"></div></div>
-          <div class="fact"><div class="t" data-i18n="sinceMidnight">Earned since midnight</div><div class="d" id="sinceDay"></div></div>
-          <div class="fact"><div class="t" data-i18n="thisWeek">Earned this week</div><div class="d" id="sinceWeek"></div></div>
-          <div class="fact"><div class="t" data-i18n="thisMonth">Earned this month</div><div class="d" id="sinceMonth"></div></div>
-        </div>
-      </div>
-
-      <!-- Fun facts -->
-      <details>
-        <summary data-i18n="funFacts">Show fun facts 🎈</summary>
-        <div class="facts">
-          <div class="fact"><div class="t" data-i18n="ffMatch">Per football match (90m)</div><div class="d" id="perMatch"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffEpisode">Per Netflix episode (45m)</div><div class="d" id="perEpisode"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffCoffee">Per coffee run (7m)</div><div class="d" id="perCoffee"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffShower">Per shower (8m)</div><div class="d" id="perShower"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffSong">Per song (3m30s)</div><div class="d" id="perSong"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffPenalty">Penalty shootout (5m)</div><div class="d" id="perPenalty"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffTraffic">Traffic light cycle (90s)</div><div class="d" id="perTraffic"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffEspresso">Espresso shot pull (30s)</div><div class="d" id="perEspresso"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffDiaper">Diaper change (2m)</div><div class="d" id="perDiaper"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffVoice">WhatsApp voice note (1m)</div><div class="d" id="perVoice"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffMicrowave">Microwave dinner (3m)</div><div class="d" id="perMicrowave"></div></div>
-          <div class="fact"><div class="t" data-i18n="ffBrush">Toothbrushing (2m30s)</div><div class="d" id="perBrush"></div></div>
-        </div>
-      </details>
+  <!-- Smart facts -->
+  <div class="section">
+    <h2 id="t_smartfacts">Smart facts</h2>
+    <div class="facts">
+      <div class="fact"><div class="t" id="t_proj">Projected year total</div><div class="d" id="proj"></div></div>
+      <div class="fact"><div class="t" id="t_sincemid">Earned since midnight</div><div class="d" id="sinceDay"></div></div>
+      <div class="fact"><div class="t" id="t_sinceweek">Earned this week</div><div class="d" id="sinceWeek"></div></div>
+      <div class="fact"><div class="t" id="t_sincemonth">Earned this month</div><div class="d" id="sinceMonth"></div></div>
     </div>
+  </div>
 
-    <!-- INSIGHTS TAB (YEARLY) -->
-    <div class="tabspace" id="panelInsights" style="display:none">
-      <div class="dock">
-        <div class="grid">
-          <div class="c-3">
-            <label data-i18n="lblInCurInsights">Input currency (Insights)</label>
-            <select id="inCurInsights"></select>
-          </div>
-          <div class="c-3">
-            <label data-i18n="lblOutCurInsights">Display currency (Insights)</label>
-            <select id="outCurInsights"></select>
-          </div>
-          <div class="c-4">
-            <label data-i18n="yearlyTotals">Yearly totals</label>
-            <div id="yearsTable"></div>
-          </div>
-          <div class="c-1">
-            <label>&nbsp;</label>
-            <button class="btn" id="addRow" data-i18n="btnAddYear">+ Add year</button>
-          </div>
-          <div class="c-1">
-            <label>&nbsp;</label>
-            <button class="btn" id="loadSample" data-i18n="btnLoadSample">Load sample</button>
-          </div>
-          <div class="c-12">
-            <small class="hint" data-i18n="insightHint">Dataset uses the <b>Input currency</b>. All metrics/charts auto-convert to <b>Display currency</b>.</small>
-          </div>
-        </div>
+  <!-- Fun facts -->
+  <details>
+    <summary id="t_funfacts">Show fun facts 🎈</summary>
+    <div class="facts">
+      <div class="fact"><div class="t" id="t_match">Per football match (90m)</div><div class="d" id="perMatch"></div></div>
+      <div class="fact"><div class="t" id="t_episode">Per Netflix episode (45m)</div><div class="d" id="perEpisode"></div></div>
+      <div class="fact"><div class="t" id="t_coffee">Per coffee run (7m)</div><div class="d" id="perCoffee"></div></div>
+      <div class="fact"><div class="t" id="t_shower">Per shower (8m)</div><div class="d" id="perShower"></div></div>
+      <div class="fact"><div class="t" id="t_song">Per song (3m30s)</div><div class="d" id="perSong"></div></div>
+      <div class="fact"><div class="t" id="t_penalty">Penalty shootout (5m)</div><div class="d" id="perPenalty"></div></div>
+      <div class="fact"><div class="t" id="t_traffic">Traffic light cycle (90s)</div><div class="d" id="perTraffic"></div></div>
+      <div class="fact"><div class="t" id="t_espresso">Espresso shot pull (30s)</div><div class="d" id="perEspresso"></div></div>
+      <div class="fact"><div class="t" id="t_diaper">Diaper change (2m)</div><div class="d" id="perDiaper"></div></div>
+      <div class="fact"><div class="t" id="t_voice">WhatsApp voice note (1m)</div><div class="d" id="perVoice"></div></div>
+      <div class="fact"><div class="t" id="t_micro">Microwave dinner (3m)</div><div class="d" id="perMicrowave"></div></div>
+      <div class="fact"><div class="t" id="t_brush">Toothbrushing (2m30s)</div><div class="d" id="perBrush"></div></div>
+    </div>
+  </details>
+</div>
+
+<!-- INSIGHTS TAB (YEARLY) -->
+<div class="tabspace" id="panelInsights" style="display:none">
+  <div class="dock">
+    <div class="grid">
+      <div class="c-2">
+        <label id="t_incur_ins">Input currency</label>
+        <select id="inCurInsights"></select>
       </div>
-
-      <!-- Insight metrics (12) -->
-      <div class="cards">
-        <div class="card"><div class="k" data-i18n="mYears">Years covered</div><div class="v" id="yYears">—</div></div>
-        <div class="card"><div class="k" data-i18n="mTotal">Total (all years)</div><div class="v" id="yTotal">—</div></div>
-        <div class="card"><div class="k" data-i18n="mAvg">Average / year</div><div class="v" id="yAvg">—</div></div>
-        <div class="card"><div class="k" data-i18n="mMedian">Median / year</div><div class="v" id="yMedian">—</div></div>
-        <div class="card"><div class="k" data-i18n="mBest">Best year</div><div class="v" id="yBest">—</div></div>
-        <div class="card"><div class="k" data-i18n="mWorst">Worst year</div><div class="v" id="yWorst">—</div></div>
-        <div class="card"><div class="k" data-i18n="mCAGR">CAGR</div><div class="v" id="yCAGR">—</div></div>
-        <div class="card"><div class="k" data-i18n="mCV">Volatility (σ/avg)</div><div class="v" id="yCV">—</div></div>
-        <div class="card"><div class="k" data-i18n="mHit">Growth hit-rate</div><div class="v" id="yHit">—</div></div>
-        <div class="card"><div class="k" data-i18n="mMDD">Max drawdown</div><div class="v" id="yMDD">—</div></div>
-        <div class="card"><div class="k" data-i18n="mLastVsAvg">Last vs avg</div><div class="v" id="yLastVsAvg">—</div></div>
-        <div class="card"><div class="k" data-i18n="mLastYoY">Last YoY growth</div><div class="v" id="yLastYoY">—</div></div>
+      <div class="c-2">
+        <label id="t_outcur_ins">Display currency</label>
+        <select id="outCurInsights"></select>
       </div>
-
-      <div class="section">
-        <h2 data-i18n="charts">Charts</h2>
-        <div class="grid">
-          <div class="c-6"><label data-i18n="cTotals">Yearly totals</label><canvas id="chartYLine" aria-label="Yearly totals line"></canvas><small class="hint" data-i18n="hTotals">Line chart of yearly totals in Display currency. Hover for details.</small></div>
-          <div class="c-6"><label data-i18n="cYoY">YoY growth %</label><canvas id="chartYoY" aria-label="YoY growth"></canvas><small class="hint" data-i18n="hYoY">Bar chart of year-over-year growth (percentage). Hover to see exact %.</small></div>
-          <div class="c-6"><label data-i18n="cCum">Cumulative total</label><canvas id="chartYCum" class="mini" aria-label="Cumulative"></canvas><small class="hint" data-i18n="hCum">Sum of all years up to each point. Shows compounding progress.</small></div>
-          <div class="c-6"><label data-i18n="cRoll">Rolling 3-yr average</label><canvas id="chartRoll" class="mini" aria-label="Rolling avg"></canvas><small class="hint" data-i18n="hRoll">Smoother trend line using last 3 years' average.</small></div>
-          <div class="c-6"><label data-i18n="cHist">Histogram</label><canvas id="chartHist" class="mini" aria-label="Histogram"></canvas><small class="hint" data-i18n="hHist">Distribution of yearly totals (how values cluster).</small></div>
-          <div class="c-6"><label data-i18n="cPie">Top-5 share</label><canvas id="chartPie" class="mini" aria-label="Top 5 share"></canvas><small class="hint" data-i18n="hPie">Top 5 years vs the rest.</small></div>
-          <div class="c-6"><label data-i18n="cDD">Drawdown</label><canvas id="chartDD" class="mini" aria-label="Drawdown"></canvas><small class="hint" data-i18n="hDD">Drop from prior peak, % (risk view).</small></div>
-          <div class="c-6"><label data-i18n="cVol">Rolling volatility</label><canvas id="chartVol" class="mini" aria-label="Volatility"></canvas><small class="hint" data-i18n="hVol">Std dev of last 3 years (stability).</small></div>
-          <div class="c-6"><label data-i18n="cScatter">Growth scatter</label><canvas id="chartScatter" class="mini" aria-label="Growth scatter"></canvas><small class="hint" data-i18n="hScatter">Year vs growth %. Closer to top = stronger growth.</small></div>
-          <div class="c-6"><label data-i18n="cLastVs">Last vs avg bar</label><canvas id="chartLastVs" class="mini" aria-label="Last vs avg"></canvas><small class="hint" data-i18n="hLastVs">How the latest year compares to historical average.</small></div>
-        </div>
+      <div class="c-6">
+        <label id="t_yearlytot">Yearly totals</label>
+        <div id="yearsTable"></div>
+      </div>
+      <div class="c-1"><label>&nbsp;</label><button class="btn" id="addRow">+ Add</button></div>
+      <div class="c-1"><label>&nbsp;</label><button class="btn" id="loadSample">Sample</button></div>
+      <div class="c-12">
+        <small class="hint" id="t_dataset_hint">Dataset uses the Input currency. All metrics/charts auto-convert to Display currency.</small>
       </div>
     </div>
   </div>
 
-  <!-- Tooltip element (shared) -->
-  <div class="tt" id="tooltip"></div>
+  <!-- Insight metrics (12) -->
+  <div class="cards">
+    <div class="card"><div class="k" id="t_yearscovered">Years covered</div><div class="v" id="yYears">—</div></div>
+    <div class="card"><div class="k" id="t_totalall">Total (all years)</div><div class="v" id="yTotal">—</div></div>
+    <div class="card"><div class="k" id="t_avgyear">Average / year</div><div class="v" id="yAvg">—</div></div>
+    <div class="card"><div class="k" id="t_median">Median / year</div><div class="v" id="yMedian">—</div></div>
+    <div class="card"><div class="k" id="t_bestyear">Best year</div><div class="v" id="yBest">—</div></div>
+    <div class="card"><div class="k" id="t_worstyear">Worst year</div><div class="v" id="yWorst">—</div></div>
+    <div class="card"><div class="k" id="t_cagr">CAGR</div><div class="v" id="yCAGR">—</div></div>
+    <div class="card"><div class="k" id="t_cv">Volatility (σ/avg)</div><div class="v" id="yCV">—</div></div>
+    <div class="card"><div class="k" id="t_hit">Growth hit-rate</div><div class="v" id="yHit">—</div></div>
+    <div class="card"><div class="k" id="t_mdd">Max drawdown</div><div class="v" id="yMDD">—</div></div>
+    <div class="card"><div class="k" id="t_lastvsavg">Last vs avg</div><div class="v" id="yLastVsAvg">—</div></div>
+    <div class="card"><div class="k" id="t_lastyoy">Last YoY growth</div><div class="v" id="yLastYoY">—</div></div>
+  </div>
 
-  <!-- Rates modal (hidden until opened) -->
-  <div class="modal" id="ratesModal" aria-hidden="true" role="dialog" aria-label="Rates">
-    <div class="modal-content">
+  <div class="section">
+    <h2 id="t_charts">Charts</h2>
+    <div class="grid">
+      <div class="c-6"><label id="t_c_yline">Yearly totals</label><canvas id="chartYLine"></canvas><small class="hint" id="t_c_yline_hint">Line chart of yearly totals in Display currency. Hover for details.</small></div>
+      <div class="c-6"><label id="t_c_yoy">YoY growth %</label><canvas id="chartYoY"></canvas><small class="hint" id="t_c_yoy_hint">Bar chart of year-over-year growth (percentage). Hover to see exact %.</small></div>
+      <div class="c-6"><label id="t_c_cum">Cumulative total</label><canvas id="chartYCum" class="mini"></canvas><small class="hint" id="t_c_cum_hint">Sum of all years up to each point. Shows compounding progress.</small></div>
+      <div class="c-6"><label id="t_c_roll">Rolling 3-yr average</label><canvas id="chartRoll" class="mini"></canvas><small class="hint" id="t_c_roll_hint">Smoother trend line using last 3 years' average.</small></div>
+      <div class="c-6"><label id="t_c_hist">Histogram</label><canvas id="chartHist" class="mini"></canvas><small class="hint" id="t_c_hist_hint">Distribution of yearly totals (how values cluster).</small></div>
+      <div class="c-6"><label id="t_c_pie">Top-5 share</label><canvas id="chartPie" class="mini"></canvas><small class="hint" id="t_c_pie_hint">Top 5 years vs the rest.</small></div>
+      <div class="c-6"><label id="t_c_dd">Drawdown</label><canvas id="chartDD" class="mini"></canvas><small class="hint" id="t_c_dd_hint">Drop from prior peak, % (risk view).</small></div>
+      <div class="c-6"><label id="t_c_vol">Rolling volatility</label><canvas id="chartVol" class="mini"></canvas><small class="hint" id="t_c_vol_hint">Std dev of last 3 years (stability).</small></div>
+      <div class="c-6"><label id="t_c_scatter">Growth scatter</label><canvas id="chartScatter" class="mini"></canvas><small class="hint" id="t_c_scatter_hint">Year vs growth %. Closer to top = stronger growth.</small></div>
+      <div class="c-6"><label id="t_c_lastvs">Last vs avg bar</label><canvas id="chartLastVs" class="mini"></canvas><small class="hint" id="t_c_lastvs_hint">How the latest year compares to historical average.</small></div>
+    </div>
+  </div>
+</div>
+
+  </div>  <!-- Tooltip element (shared) -->  <div class="tt" id="tooltip"></div>  <!-- Rates modal (Close next to Save) -->  <div class="modal" id="ratesModal">
+    <div class="modal-content" role="dialog" aria-labelledby="ratesTitle">
       <div class="modal-header">
-        <h3 data-i18n="ratesTitle">Currency rates (base USD = 1.00)</h3>
+        <h3 id="ratesTitle">Currency rates (base USD = 1.00)</h3>
       </div>
       <div class="row">
         <div><label>USD</label><input id="usdRate" type="number" step="0.01" value="1.00" readonly></div>
@@ -270,82 +253,85 @@
         <div><label>OMR</label><input id="omrRate" type="number" step="0.001" value="0.384"></div>
         <div><label>BHD</label><input id="bhdRate" type="number" step="0.001" value="0.376"></div>
       </div>
-      <div class="modal-actions">
-        <button class="btn" id="cancelRates" data-i18n="btnClose">Close</button>
-        <button class="btn" id="saveRates" data-i18n="btnSave">Save</button>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn" id="cancelRates">Close</button>
+        <button class="btn" id="saveRates">Save</button>
       </div>
     </div>
-  </div>
-
-<script>
+  </div><script>
 // ---------- helpers / state ----------
 const $ = (id)=>document.getElementById(id);
 const CURRENCIES=['USD','EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'];
 const PAL=['#7dd3fc','#a7f3d0','#fca5a5','#fde68a','#c4b5fd','#f9a8d4','#93c5fd','#6ee7b7','#fcd34d','#fdba74'];
-let LOCALE='en-US';
-const fmt = (n)=> (Number.isFinite(n)? n : 0).toLocaleString(LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt = (n)=> (Math.abs(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 let exchangeRates = {USD:1.00,EGP:50.00,SAR:3.75,KWD:0.30,AED:3.67,EUR:0.92,GBP:0.78,QAR:3.64,OMR:0.384,BHD:0.376};
-const stateKey='super_earnings_tabs_v6';
+const stateKey='super_earnings_tabs_v5';
 let years=[]; // [{year,value}] in input currency
-let lang='en';
+let currentOutC='USD';
 
 // i18n
-const I18N={
+const i18n={
   en:{
-    title:'Super Earnings Pace', subtitle:'Manual rates · clean pace · smart + fun facts',
+    t_title:'Super Earnings Pace', t_sub:'Manual rates · clean pace · smart + fun facts',
     tabDash:'Dashboard', tabInsights:'Insights Lab',
-    lblTotal:'Total earned to date', lblInCur:'Input currency', lblOutCur:'Display currency', btnRates:'Rates',
-    kpiPerSec:'Per second', kpiPerMin:'Per minute', kpiPerHr:'Per hour', kpiPerDay:'Per day', kpiPerWk:'Per week', kpiPerMon:'Per month (avg)',
-    yearProgress:'Year progress', earnedOther:'Earned until now — other currencies', smartFacts:'Smart facts',
-    projYear:'Projected year total', sinceMidnight:'Earned since midnight', thisWeek:'Earned this week', thisMonth:'Earned this month',
-    funFacts:'Show fun facts 🎈', ffMatch:'Per football match (90m)', ffEpisode:'Per Netflix episode (45m)', ffCoffee:'Per coffee run (7m)', ffShower:'Per shower (8m)', ffSong:'Per song (3m30s)', ffPenalty:'Penalty shootout (5m)', ffTraffic:'Traffic light cycle (90s)', ffEspresso:'Espresso shot pull (30s)', ffDiaper:'Diaper change (2m)', ffVoice:'WhatsApp voice note (1m)', ffMicrowave:'Microwave dinner (3m)', ffBrush:'Toothbrushing (2m30s)',
-    lblInCurInsights:'Input currency (Insights)', lblOutCurInsights:'Display currency (Insights)', yearlyTotals:'Yearly totals', btnAddYear:'+ Add year', btnLoadSample:'Load sample', insightHint:'Dataset uses the <b>Input currency</b>. All metrics/charts auto-convert to <b>Display currency</b>.',
-    mYears:'Years covered', mTotal:'Total (all years)', mAvg:'Average / year', mMedian:'Median / year', mBest:'Best year', mWorst:'Worst year', mCAGR:'CAGR', mCV:'Volatility (σ/avg)', mHit:'Growth hit-rate', mMDD:'Max drawdown', mLastVsAvg:'Last vs avg', mLastYoY:'Last YoY growth',
-    charts:'Charts', cTotals:'Yearly totals', hTotals:'Line chart of yearly totals in Display currency. Hover for details.', cYoY:'YoY growth %', hYoY:'Bar chart of year-over-year growth (percentage). Hover to see exact %.', cCum:'Cumulative total', hCum:'Sum of all years up to each point. Shows compounding progress.', cRoll:'Rolling 3-yr average', hRoll:"Smoother trend line using last 3 years' average.", cHist:'Histogram', hHist:'Distribution of yearly totals (how values cluster).', cPie:'Top-5 share', hPie:'Top 5 years vs the rest.', cDD:'Drawdown', hDD:'Drop from prior peak, % (risk view).', cVol:'Rolling volatility', hVol:'Std dev of last 3 years (stability).', cScatter:'Growth scatter', hScatter:'Year vs growth %. Closer to top = stronger growth.', cLastVs:'Last vs avg bar', hLastVs:'How the latest year compares to historical average.',
-    ratesTitle:'Currency rates (base USD = 1.00)', btnClose:'Close', btnSave:'Save'
+    t_total_label:'Total earned to date', t_incur:'Input currency', t_outcur:'Display currency', btnRates:'Rates',
+    t_persec:'Per second', t_permin:'Per minute', t_perhr:'Per hour', t_perday:'Per day', t_perwk:'Per week', t_permon:'Per month (avg)',
+    t_yearprog:'Year progress', t_othercurr:'Earned until now — other currencies',
+    t_smartfacts:'Smart facts', t_proj:'Projected year total', t_sincemid:'Earned since midnight', t_sinceweek:'Earned this week', t_sincemonth:'Earned this month',
+    t_funfacts:'Show fun facts 🎈',
+    t_match:'Per football match (90m)', t_episode:'Per Netflix episode (45m)', t_coffee:'Per coffee run (7m)', t_shower:'Per shower (8m)', t_song:'Per song (3m30s)', t_penalty:'Penalty shootout (5m)', t_traffic:'Traffic light cycle (90s)', t_espresso:'Espresso shot pull (30s)', t_diaper:'Diaper change (2m)', t_voice:'WhatsApp voice note (1m)', t_micro:'Microwave dinner (3m)', t_brush:'Toothbrushing (2m30s)',
+    t_incur_ins:'Input currency', t_outcur_ins:'Display currency', t_yearlytot:'Yearly totals', t_dataset_hint:'Dataset uses the Input currency. All metrics/charts auto-convert to Display currency.',
+    t_yearscovered:'Years covered', t_totalall:'Total (all years)', t_avgyear:'Average / year', t_median:'Median / year', t_bestyear:'Best year', t_worstyear:'Worst year', t_cagr:'CAGR', t_cv:'Volatility (σ/avg)', t_hit:'Growth hit-rate', t_mdd:'Max drawdown', t_lastvsavg:'Last vs avg', t_lastyoy:'Last YoY growth',
+    t_charts:'Charts', t_c_yline:'Yearly totals', t_c_yline_hint:'Line chart of yearly totals in Display currency. Hover for details.', t_c_yoy:'YoY growth %', t_c_yoy_hint:'Bar chart of year-over-year growth (percentage). Hover to see exact %.', t_c_cum:'Cumulative total', t_c_cum_hint:'Sum of all years up to each point. Shows compounding progress.', t_c_roll:'Rolling 3-yr average', t_c_roll_hint:'Smoother trend line using last 3 years\' average.', t_c_hist:'Histogram', t_c_hist_hint:'Distribution of yearly totals (how values cluster).', t_c_pie:'Top-5 share', t_c_pie_hint:'Top 5 years vs the rest.', t_c_dd:'Drawdown', t_c_dd_hint:'Drop from prior peak, % (risk view).', t_c_vol:'Rolling volatility', t_c_vol_hint:'Std dev of last 3 years (stability).', t_c_scatter:'Growth scatter', t_c_scatter_hint:'Year vs growth %. Closer to top = stronger growth.', t_c_lastvs:'Last vs avg bar', t_c_lastvs_hint:'How the latest year compares to historical average.',
+    ratesTitle:'Currency rates (base USD = 1.00)', btnClose:'Close', btnSave:'Save', btnAdd:'+ Add', btnSample:'Sample'
   },
   ar:{
-    title:'مؤشر سرعة الدخل', subtitle:'أسعار يدوية · عرض نظيف · حقائق ذكية ومضحكة',
-    tabDash:'لوحة التحكم', tabInsights:'معمل التحليلات',
-    lblTotal:'إجمالي الدخل حتى الآن', lblInCur:'عملة الإدخال', lblOutCur:'عملة العرض', btnRates:'الأسعار',
-    kpiPerSec:'لكل ثانية', kpiPerMin:'لكل دقيقة', kpiPerHr:'لكل ساعة', kpiPerDay:'لكل يوم', kpiPerWk:'لكل أسبوع', kpiPerMon:'لكل شهر (متوسط)',
-    yearProgress:'تقدم السنة', earnedOther:'المبلغ المُحقق الآن — بعملات أخرى', smartFacts:'حقائق ذكية',
-    projYear:'إجمالي السنة المتوقع', sinceMidnight:'منذ منتصف الليل', thisWeek:'هذا الأسبوع', thisMonth:'هذا الشهر',
-    funFacts:'اعرض حقائق مرِحة 🎈', ffMatch:'مباراة كرة قدم (90د)', ffEpisode:'حلقة نتفلكس (45د)', ffCoffee:'مشوار قهوة (7د)', ffShower:'دُش سريع (8د)', ffSong:'أغنية (3:30د)', ffPenalty:'ركلات ترجيح (5د)', ffTraffic:'إشارة مرور (90ث)', ffEspresso:'استخراج إسبرسو (30ث)', ffDiaper:'تغيير حفاضة (2د)', ffVoice:'رسالة صوتية (1د)', ffMicrowave:'عشاء مايكروويف (3د)', ffBrush:'تفريش أسنان (2:30د)',
-    lblInCurInsights:'عملة الإدخال (التحليلات)', lblOutCurInsights:'عملة العرض (التحليلات)', yearlyTotals:'إجماليات سنوية', btnAddYear:'+ سنة', btnLoadSample:'بيانات مثال', insightHint:'البيانات تستخدم <b>عملة الإدخال</b>، وكل المقاييس/الرسوم تتحول تلقائيًا إلى <b>عملة العرض</b>.',
-    mYears:'عدد السنوات', mTotal:'الإجمالي (كل السنوات)', mAvg:'متوسط/سنة', mMedian:'الوسيط/سنة', mBest:'أفضل سنة', mWorst:'أسوأ سنة', mCAGR:'معدل النمو المركب', mCV:'التذبذب (σ/متوسط)', mHit:'سنوات نمو (%)', mMDD:'أقصى هبوط', mLastVsAvg:'الأخيرة مقابل المتوسط', mLastYoY:'نمو السنة الأخيرة',
-    charts:'رسوم بيانية', cTotals:'الإجماليات السنوية', hTotals:'منحنى الإجماليات السنوية بعملة العرض. مرر للف التفاصيل.', cYoY:'النمو السنوي %', hYoY:'أعمدة لنسبة النمو سنة على سنة.', cCum:'الإجمالي التراكمي', hCum:'مجموع كل السنوات حتى كل نقطة.', cRoll:'متوسط متحرك 3 سنوات', hRoll:'منحنى أكثر سلاسة لآخر 3 سنوات.', cHist:'هيستوجرام', hHist:'توزيع القيم السنوية.', cPie:'حصة أعلى 5 سنوات', hPie:'أفضل خمس سنوات مقابل الباقي.', cDD:'الهبوط من القمة', hDD:'الانخفاض عن أعلى قمة سابقة (%)', cVol:'تذبذب متحرك', hVol:'انحراف معياري لآخر 3 سنوات.', cScatter:'مبعثر النمو', hScatter:'السنة مقابل نسبة النمو.', cLastVs:'الأخيرة مقابل المتوسط', hLastVs:'مقارنة السنة الأخيرة بمتوسط التاريخ.',
-    ratesTitle:'أسعار العملات (الأساس USD = 1.00)', btnClose:'إغلاق', btnSave:'حفظ'
+    t_title:'مؤشّر وتيرة الأرباح', t_sub:'أسعار يدوية · وتيرة نظيفة · حقائق ذكية وممتعة',
+    tabDash:'لوحة التحكم', tabInsights:'مختبر الرؤى',
+    t_total_label:'إجمالي المُحصَّل حتى الآن', t_incur:'عملة الإدخال', t_outcur:'عملة العرض', btnRates:'الأسعار',
+    t_persec:'لكل ثانية', t_permin:'لكل دقيقة', t_perhr:'لكل ساعة', t_perday:'لكل يوم', t_perwk:'لكل أسبوع', t_permon:'لكل شهر (متوسط)',
+    t_yearprog:'تقدّم السنة', t_othercurr:'المحصّل حتى الآن — عملات أخرى',
+    t_smartfacts:'حقائق ذكية', t_proj:'الإجمالي المتوقع لنهاية السنة', t_sincemid:'المحصّل منذ منتصف الليل', t_sinceweek:'المحصّل هذا الأسبوع', t_sincemonth:'المحصّل هذا الشهر',
+    t_funfacts:'اعرض حقائق ممتعة 🎈',
+    t_match:'لكل مباراة كرة (90 د)', t_episode:'لكل حلقة نتفلكس (45 د)', t_coffee:'لكل مشوار قهوة (7 د)', t_shower:'لكل دش (8 د)', t_song:'لكل أغنية (3 د 30 ث)', t_penalty:'ركلات ترجيح (5 د)', t_traffic:'دورة إشارة مرور (90 ث)', t_espresso:'سحبة إسبرسو (30 ث)', t_diaper:'تغيير حفاض (2 د)', t_voice:'رسالة صوتية (1 د)', t_micro:'عشاء مايكروويف (3 د)', t_brush:'تفريش أسنان (2 د 30 ث)',
+    t_incur_ins:'عملة الإدخال', t_outcur_ins:'عملة العرض', t_yearlytot:'إجماليات سنوية', t_dataset_hint:'البيانات تستخدم عملة الإدخال. كل المقاييس/الرسوم تتحول تلقائيًا لعملة العرض.',
+    t_yearscovered:'السنوات المُدرجة', t_totalall:'الإجمالي (كل السنوات)', t_avgyear:'متوسط/سنة', t_median:'الوسيط/سنة', t_bestyear:'أفضل سنة', t_worstyear:'أسوأ سنة', t_cagr:'معدل النمو المركب', t_cv:'التذبذب (σ/متوسط)', t_hit:'معدل سنوات النمو', t_mdd:'أقصى تراجع', t_lastvsavg:'الأخيرة مقابل المتوسط', t_lastyoy:'نمو سنة-لسنة للأخيرة',
+    t_charts:'رسوم بيانية', t_c_yline:'إجماليات سنوية', t_c_yline_hint:'خط يوضح الإجمالي السنوي بعملة العرض. مرّر للفاصيل.', t_c_yoy:'نمو % سنة-لسنة', t_c_yoy_hint:'أعمدة توضح النسبة. مرّر لرؤية القيمة.', t_c_cum:'الإجمالي التراكمي', t_c_cum_hint:'مجموع كل السنوات حتى كل نقطة.', t_c_roll:'متوسط متحرك 3 سنوات', t_c_roll_hint:'خط أكثر سلاسة بمتوسط آخر 3 سنوات.', t_c_hist:'مخطط تكراري', t_c_hist_hint:'توزيع الإجماليات السنوية.', t_c_pie:'حصة أعلى 5 سنوات', t_c_pie_hint:'أفضل 5 سنوات مقابل الباقي.', t_c_dd:'التراجع من القمة', t_c_dd_hint:'الهبوط عن أعلى قيمة سابقة %.', t_c_vol:'تذبذب متحرك', t_c_vol_hint:'الانحراف المعياري لآخر 3 سنوات.', t_c_scatter:'نقاط النمو', t_c_scatter_hint:'السنة مقابل نسبة النمو.', t_c_lastvs:'الأخيرة مقابل المتوسط', t_c_lastvs_hint:'مقارنة السنة الأخيرة بالمتوسط التاريخي.',
+    ratesTitle:'أسعار العملات (الأساس USD = 1.00)', btnClose:'إغلاق', btnSave:'حفظ', btnAdd:'+ إضافة', btnSample:'عينة'
   }
 };
+let lang='en';
 
-function t(key){ return (I18N[lang] && I18N[lang][key]) || key; }
 function applyI18n(){
-  document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(k && I18N[lang][k]!==undefined){ el.innerHTML = I18N[lang][k]; }});
-  // locale & dir
-  LOCALE = (lang==='ar')? 'ar-EG' : 'en-US';
-  document.documentElement.lang = (lang==='ar')? 'ar' : 'en';
-  document.documentElement.dir  = (lang==='ar')? 'rtl' : 'ltr';
+  const dict=i18n[lang];
+  const ids=Object.keys(dict);
+  ids.forEach(id=>{ const el=$(id); if(el) el.textContent=dict[id]; });
+  document.documentElement.lang = lang==='ar'?'ar':'en';
+  document.documentElement.classList.toggle('rtl', lang==='ar');
 }
 
+function setLang(next){ lang=next; applyI18n(); renderYears(); drawYearInsights(); save(); }
+
+// persistence
 function save(){ const s={ total: $('total').value, inCur: $('inCur').value, outCur: $('outCur').value, years, rates: exchangeRates, lang }; localStorage.setItem(stateKey, JSON.stringify(s)); }
 function load(){ const saved = localStorage.getItem(stateKey); if(!saved) return; try{ const s=JSON.parse(saved); ['total','inCur','outCur'].forEach(k=>{ if(s[k]!==undefined && $(k)) $(k).value=s[k]; }); if(s.rates) exchangeRates={...exchangeRates, ...s.rates}; if(Array.isArray(s.years)) years=s.years; if(s.lang) lang=s.lang; }catch(e){} }
 
 // currency + conversion
 function convert(amount, from, to){ if(!amount) return 0; const usd = amount / (exchangeRates[from] || 1); return usd * (exchangeRates[to] || 1); }
-function setInputCurrency(cur){ if(CURRENCIES.includes(cur)){ $('inCur').value=cur; const ic2=$('inCurInsights'); if(ic2) ic2.value=cur; renderYears(); calc(); drawYearInsights(); save(); } }
-function setDisplayCurrency(cur){ if(CURRENCIES.includes(cur)){ $('outCur').value=cur; const oc2=$('outCurInsights'); if(oc2) oc2.value=cur; calc(); drawYearInsights(); save(); } }
+function setInputCurrency(cur){ if(CURRENCIES.includes(cur)){ $('inCur').value=cur; $('inCurInsights').value=cur; renderYears(); calc(); drawYearInsights(); save(); } }
+function setDisplayCurrency(cur){ if(CURRENCIES.includes(cur)){ $('outCur').value=cur; $('outCurInsights').value=cur; currentOutC=cur; calc(); drawYearInsights(); save(); } }
 
 // table UI for years
 function renderYears(){
-  const wrap=$('yearsTable'); wrap.innerHTML='';
+  const wrap=$('yearsTable'); if(!wrap) return; wrap.innerHTML='';
   const table=document.createElement('div'); table.style.display='grid'; table.style.gridTemplateColumns='140px 1fr 100px'; table.style.gap='12px';
-  const head=[ t('year'), `${t('yearlyTotals')} (${ $('inCur').value||'USD' })`, '' ];
-  head.forEach(ti=>{ const h=document.createElement('div'); h.style.color='#9a9a9a'; h.style.fontSize='12px'; h.textContent=ti; table.appendChild(h); });
+  const head=[ i18n[lang].t_yearlytot, i18n[lang].t_totalall+` (${($('inCur').value||'USD')})`, '' ];
+  head.forEach(t=>{ const h=document.createElement('div'); h.style.color='#9a9a9a'; h.style.fontSize='12px'; h.textContent=t; table.appendChild(h); });
   years.forEach((row,idx)=>{
     const y=document.createElement('input'); y.type='number'; y.value=row.year; y.min=1900; y.max=9999; y.step=1;
     const v=document.createElement('input'); v.type='number'; v.step='0.01'; v.min='0'; v.value=row.value;
-    const del=document.createElement('button'); del.className='btn'; del.textContent= (lang==='ar'?'حذف':'Delete');
+    const del=document.createElement('button'); del.className='btn'; del.textContent= i18n[lang].btnClose; // reuse label visually as "Delete" alternative in AR if needed
+    del.textContent = lang==='ar'? 'حذف' : 'Delete';
     y.addEventListener('input',()=>{ years[idx].year=parseInt(y.value||0,10); drawYearInsights(); save(); });
     v.addEventListener('input',()=>{ years[idx].value=parseFloat(v.value||0); drawYearInsights(); save(); });
     del.addEventListener('click',()=>{ years.splice(idx,1); renderYears(); drawYearInsights(); save(); });
@@ -356,22 +342,23 @@ function renderYears(){
 
 // ---------- dashboard calc ----------
 function calc(){
-  const totalRaw=parseFloat($('total').value)||0; const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD';
-  const now=new Date(); const start=new Date(now.getFullYear(),0,1,0,0,0,0);
-  const end=new Date(now.getFullYear(),11,31,23,59,59,999);
-  const elapsedMs = now - start; const yearMs = end - start;
+  const totalRaw=parseFloat($('total').value)||0; const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; currentOutC=outC;
+  const now=new Date(); const start=new Date(now.getFullYear(),0,1); start.setHours(0,0,0,0);
 
   const total = convert(totalRaw, inC, outC);
+  const endYear=new Date(now.getFullYear(),11,31,23,59,59,999);
+  const elapsedMs = now - start; const yearMs = endYear - start;
+  const totalDays=Math.round(yearMs/86400000);
+
   const elapsedHours = Math.max(elapsedMs/3600000, 1e-9);
-  const perHour = total/elapsedHours; const perMinute=perHour/60; const perSecond=perMinute/60; const perDay=perHour*24; const perWeek=perDay*7; const perMonth= perHour*(yearMs/12/3600000);
+  const perHour = total/elapsedHours; const perMinute=perHour/60; const perSecond=perMinute/60; const perDay=perHour*24; const perWeek=perDay*7; const perMonth=perDay*(totalDays/12);
 
   $('perSec').textContent=fmt(perSecond); $('perMin').textContent=fmt(perMinute); $('perHr').textContent=fmt(perHour); $('perDay').textContent=fmt(perDay); $('perWk').textContent=fmt(perWeek); $('perMon').textContent=fmt(perMonth);
 
-  const yearPct=Math.min((elapsedMs/yearMs)*100,100); $('yBar').style.width=yearPct.toFixed(4)+'%'; $('yPct').textContent=yearPct.toFixed(1)+'%';
-  const elapsedDaysLabel=Math.floor(elapsedMs/86400000)+1; const totalDays=Math.floor(yearMs/86400000)+1;
-  $('elapsedLabel').textContent = (lang==='ar')? `اليوم ${elapsedDaysLabel} من ${totalDays}` : `day ${elapsedDaysLabel} of ${totalDays}`;
+  const yearPct=Math.min((elapsedMs/yearMs)*100,100); $('yBar').style.width=yearPct.toFixed(2)+'%'; $('yPct').textContent=yearPct.toFixed(1)+'%';
+  const dayNumber = Math.floor((now-start)/86400000)+1; const daysInYear = Math.floor((endYear-start)/86400000)+1; $('elapsedLabel').textContent = (lang==='ar'?`اليوم ${dayNumber} من ${daysInYear}`:`day ${dayNumber} of ${daysInYear}`);
 
-  $('proj').textContent = `${fmt(perHour*(yearMs/3600000))} ${outC}`;
+  $('proj').textContent = `${fmt(perHour*(daysInYear*24))} ${outC}`;
 
   const sinceMidnightHours=(now-new Date(now.getFullYear(),now.getMonth(),now.getDate()))/3600000; $('sinceDay').textContent=`${fmt(perHour*sinceMidnightHours)} ${outC}`;
   const sow=(d=>{ const x=new Date(d); const day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); x.setHours(0,0,0,0); return x; })(now);
@@ -380,17 +367,16 @@ function calc(){
   const hoursMonth=(now-som)/3600000; $('sinceMonth').textContent=`${fmt(perHour*hoursMonth)} ${outC}`;
 
   // fun facts
-  const perSecVal   = total/Math.max((now-start)/1000, 1e-6);
-  const perMinVal   = perSecVal*60;
-  const f = (m)=>fmt(perMinVal*m)+' '+outC;
+  const perSec   = total/Math.max((now-start)/1000, 1e-6);
+  const perMin   = perSec*60; const f = (m)=>fmt(perMin*m)+' '+outC;
   $('perMatch').textContent    = f(90);
   $('perEpisode').textContent  = f(45);
   $('perCoffee').textContent   = f(7);
   $('perShower').textContent   = f(8);
   $('perSong').textContent     = f(3.5);
   $('perPenalty').textContent  = f(5);
-  $('perTraffic').textContent  = fmt(perSecVal*90)+' '+outC;
-  $('perEspresso').textContent = fmt(perSecVal*30)+' '+outC;
+  $('perTraffic').textContent  = fmt(perSec*90)+' '+outC;
+  $('perEspresso').textContent = fmt(perSec*30)+' '+outC;
   $('perDiaper').textContent   = f(2);
   $('perVoice').textContent    = f(1);
   $('perMicrowave').textContent= f(3);
@@ -399,16 +385,7 @@ function calc(){
   renderOtherCurrencies(totalRaw, inC);
 }
 
-function renderOtherCurrencies(totalRaw, inC){
-  const list=$('otherList'); list.innerHTML='';
-  CURRENCIES.filter(c=>c!==inC).forEach(c=>{
-    const val = convert(totalRaw, inC, c);
-    const div=document.createElement('div');
-    div.className='other';
-    div.innerHTML=`<div class="c">${c}</div><div class="n">${fmt(val)}</div>`;
-    list.appendChild(div);
-  });
-}
+function renderOtherCurrencies(totalRaw, inC){ const list=$('otherList'); list.innerHTML=''; CURRENCIES.filter(c=>c!==inC).forEach(c=>{ const val = convert(totalRaw, inC, c); const div=document.createElement('div'); div.className='other'; div.innerHTML=`<div class="c">${c}</div><div class="n">${fmt(val)}</div>`; list.appendChild(div); }); }
 
 // ---------- charts engine (hi-DPI + colors + tooltips + data labels) ----------
 function setupCanvas(c){ const dpr=window.devicePixelRatio||1; const w=c.clientWidth; const h=c.clientHeight; c.width=Math.floor(w*dpr); c.height=Math.floor(h*dpr); const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return ctx; }
@@ -420,7 +397,7 @@ function pieChart(canvas, data){ const ctx=setupCanvas(canvas); const w=canvas.c
 function scatterChart(canvas, xs, ys, colorIdx=6){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h); const xmin=Math.min(...xs), xmax=Math.max(...xs), ymin=Math.min(...ys), ymax=Math.max(...ys); const x=(v)=> pad + ((v-xmin)/(xmax-xmin||1))*(w-2*pad), y=(v)=> h-pad - ((v-ymin)/(ymax-ymin||1))*(h-2*pad); ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._points=[]; xs.forEach((vx,i)=>{ const px=x(vx), py=y(ys[i]); ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill(); drawValue(ctx, px, py, ys[i].toFixed(1)); canvas._points.push({x:px,y:py,label:vx,v:ys[i]}); }); }
 
 // ---------- tooltips binding ----------
-function bindTooltip(canvas, accessor){ const tt=$('tooltip'); canvas.addEventListener('mousemove', (e)=>{ const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const hit=accessor(canvas,x,y); if(hit){ tt.style.display='block'; tt.style.left=e.clientX+'px'; tt.style.top=e.clientY+'px'; tt.innerHTML = `<b>${hit.label}</b><br/>${fmt(hit.v)}${hit.suffix||''}`; } else { tt.style.display='none'; } }); canvas.addEventListener('mouseleave', ()=>{ $('tooltip').style.display='none'; }); }
+function bindTooltip(canvas, accessor){ const tt=$('tooltip'); canvas.addEventListener('mousemove', (e)=>{ const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const hit=accessor(canvas,x,y); if(hit){ tt.style.display='block'; tt.style.left=e.clientX+'px'; tt.style.top=e.clientY+'px'; tt.innerHTML = `<b>${hit.label}</b><br/>${fmt(hit.v)} ${currentOutC}`; } else { tt.style.display='none'; } }); canvas.addEventListener('mouseleave', ()=>{ $('tooltip').style.display='none'; }); }
 function nearPoint(points,x,y){ let m=null,d2=25; points.forEach(p=>{ const dd=(p.x-x)*(p.x-x)+(p.y-y)*(p.y-y); if(dd<d2){ m=p; d2=dd; } }); return m; }
 function insideBar(bars,x,y){ for(const b of bars){ if(x>=b.x && x<=b.x+b.w && y>=b.y && y<=b.y+b.h) return b; } return null; }
 function insideSlice(canvas,x,y){ if(!canvas._slices) return null; const r=Math.min(canvas.clientWidth,canvas.clientHeight)/2 - 20; const cx=canvas.clientWidth/2, cy=canvas.clientHeight/2; const dx=x-cx, dy=y-cy; const dist=Math.sqrt(dx*dx+dy*dy); if(dist>r) return null; let ang=Math.atan2(dy,dx); if(ang< -Math.PI/2) ang+=2*Math.PI; for(const s of canvas._slices){ if(ang>=s.a0 && ang<=s.a1) return {label:'Slice', v:s.value, suffix:` (${s.pct})`}; } return null; }
@@ -428,15 +405,18 @@ function insideSlice(canvas,x,y){ if(!canvas._slices) return null; const r=Math.
 // ---------- yearly insights ----------
 function statsYears(arr){ const n=arr.length; if(!n) return null; const vals = arr.map(o=>o.value); const sum=vals.reduce((a,b)=>a+b,0); const avg=sum/n; const sorted=[...vals].sort((a,b)=>a-b); const median = n%2? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2; let bestI=0, worstI=0; for(let i=1;i<n;i++){ if(vals[i]>vals[bestI]) bestI=i; if(vals[i]<vals[worstI]) worstI=i; } const variance = vals.reduce((a,b)=>a+(b-avg)*(b-avg),0)/n; const sd = Math.sqrt(variance); const cv = avg? sd/avg : 0; const first = vals[0]; const last = vals[n-1]; const yearsSpan = Math.max(arr[n-1].year - arr[0].year, n-1); const cagr = (yearsSpan>0 && first>0)? Math.pow(last/first, 1/yearsSpan)-1 : 0; const yoy = vals.map((v,i)=> i===0? 0 : (vals[i-1]===0? 0 : (v/vals[i-1]-1)) ); const hitRate = yoy.slice(1).filter(g=>g>0).length / Math.max(n-1,1); let peak=vals[0], mdd=0; const ddSeries=[0]; for(let i=1;i<n;i++){ peak=Math.max(peak, vals[i-1]); const dd = peak? (vals[i]-peak)/peak : 0; mdd = Math.min(mdd, dd); ddSeries.push(dd); } const rollVol=[]; for(let i=0;i<n;i++){ const s=vals.slice(Math.max(0,i-2), i+1); const mu=s.reduce((a,b)=>a+b,0)/s.length; const vv=s.reduce((a,b)=>a+(b-mu)*(b-mu),0)/s.length; rollVol.push(Math.sqrt(vv)); } return {sum,avg,median,bestI,worstI,cv,cagr,yoy,hitRate,mdd,ddSeries,rollVol,last,first}; }
 
-function drawYearInsights(){ const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; if(years.length===0){ ['yYears','yTotal','yAvg','yMedian','yBest','yWorst','yCAGR','yCV','yHit','yMDD','yLastVsAvg','yLastYoY'].forEach(id=>$(id).textContent='—'); ['chartYLine','chartYoY','chartYCum','chartRoll','chartHist','chartPie','chartDD','chartVol','chartScatter','chartLastVs'].forEach(id=>{ const c=$(id); const ctx=setupCanvas(c); ctx.clearRect(0,0,c.clientWidth,c.clientHeight); }); return; } const series = years.slice().sort((a,b)=>a.year-b.year); const conv = series.map(o=> ({year:o.year, value: convert(o.value, inC, outC)})); const labels = conv.map(o=>String(o.year)); const vals = conv.map(o=>o.value); const st = statsYears(conv); $('yYears').textContent = conv.length; $('yTotal').textContent = `${fmt(st.sum)} ${outC}`; $('yAvg').textContent = `${fmt(st.avg)} ${outC}`; $('yMedian').textContent= `${fmt(st.median)} ${outC}`; $('yBest').textContent = `${labels[st.bestI]} · ${fmt(vals[st.bestI])} ${outC}`; $('yWorst').textContent= `${labels[st.worstI]} · ${fmt(vals[st.worstI])} ${outC}`; $('yCAGR').textContent = `${(st.cagr*100).toFixed(2)}%`; $('yCV').textContent = `${(st.cv*100).toFixed(1)}%`; $('yHit').textContent = `${(st.hitRate*100).toFixed(0)}% ${lang==='ar'?'سنوات نمو':'up years'}`; $('yMDD').textContent = `${(st.mdd*100).toFixed(1)}%`; const lastVsAvg = st.avg? (st.last/st.avg - 1) : 0; $('yLastVsAvg').textContent = `${(lastVsAvg*100).toFixed(1)}%`; const lastYoY = st.yoy.length>1? st.yoy[st.yoy.length-1] : 0; $('yLastYoY').textContent = `${(lastYoY*100).toFixed(1)}%`; const c1=$('chartYLine'); lineChart(c1, vals, labels, 0); bindTooltip(c1,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c2=$('chartYoY'); barChart(c2, st.yoy.map(v=>v*100), labels, 2); bindTooltip(c2,(cv,x,y)=> insideBar(cv._bars||[],x,y)); const cum=[]; vals.reduce((a,b,i)=> cum[i]=a+b, 0); const c3=$('chartYCum'); lineChart(c3, cum, labels, 1); bindTooltip(c3,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const roll=[]; for(let i=0;i<vals.length;i++){ const s=vals.slice(Math.max(0,i-2), i+1); roll.push(s.reduce((a,b)=>a+b,0)/s.length); } const c4=$('chartRoll'); lineChart(c4, roll, labels, 4); bindTooltip(c4,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c5=$('chartHist'); histChart(c5, vals, Math.min(vals.length,6), 5); bindTooltip(c5,(cv,x,y)=> insideBar(cv._bars||[],x,y)); const top=[...vals].sort((a,b)=>b-a).slice(0,5); const rest=Math.max(0, st.sum - top.reduce((a,b)=>a+b,0)); const c6=$('chartPie'); pieChart(c6, [...top, rest]); bindTooltip(c6,(cv,x,y)=> insideSlice(cv,x,y)); const c7=$('chartDD'); lineChart(c7, st.ddSeries.map(v=>v*100), labels, 6); bindTooltip(c7,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c8=$('chartVol'); lineChart(c8, st.rollVol, labels, 7); bindTooltip(c8,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const xs = conv.map(o=>o.year); const ys = st.yoy.map(v=>v*100); const c9=$('chartScatter'); scatterChart(c9, xs.slice(1), ys.slice(1), 8); bindTooltip(c9,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c10=$('chartLastVs'); barChart(c10, [lastVsAvg*100], ['Last vs Avg'], 9); bindTooltip(c10,(cv,x,y)=> insideBar(cv._bars||[],x,y)); }
+function drawYearInsights(){ const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; currentOutC=outC; if(years.length===0){ ['yYears','yTotal','yAvg','yMedian','yBest','yWorst','yCAGR','yCV','yHit','yMDD','yLastVsAvg','yLastYoY'].forEach(id=>$(id).textContent='—'); ['chartYLine','chartYoY','chartYCum','chartRoll','chartHist','chartPie','chartDD','chartVol','chartScatter','chartLastVs'].forEach(id=>{ const c=$(id); const ctx=setupCanvas(c); ctx.clearRect(0,0,c.clientWidth,c.clientHeight); }); return; } const series = years.slice().sort((a,b)=>a.year-b.year); const conv = series.map(o=> ({year:o.year, value: convert(o.value, inC, outC)})); const labels = conv.map(o=>String(o.year)); const vals = conv.map(o=>o.value); const st = statsYears(conv); $('yYears').textContent = conv.length; $('yTotal').textContent = `${fmt(st.sum)} ${outC}`; $('yAvg').textContent = `${fmt(st.avg)} ${outC}`; $('yMedian').textContent= `${fmt(st.median)} ${outC}`; $('yBest').textContent = `${labels[st.bestI]} · ${fmt(vals[st.bestI])} ${outC}`; $('yWorst').textContent= `${labels[st.worstI]} · ${fmt(vals[st.worstI])} ${outC}`; $('yCAGR').textContent = `${(st.cagr*100).toFixed(2)}%`; $('yCV').textContent = `${(st.cv*100).toFixed(1)}%`; $('yHit').textContent = `${(st.hitRate*100).toFixed(0)}% ${lang==='ar'?'سنوات نمو':'up years'}`; $('yMDD').textContent = `${(st.mdd*100).toFixed(1)}%`; const lastVsAvg = st.avg? (st.last/st.avg - 1) : 0; $('yLastVsAvg').textContent = `${(lastVsAvg*100).toFixed(1)}%`; const lastYoY = st.yoy.length>1? st.yoy[st.yoy.length-1] : 0; $('yLastYoY').textContent = `${(lastYoY*100).toFixed(1)}%`; const c1=$('chartYLine'); lineChart(c1, vals, labels, 0); bindTooltip(c1,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c2=$('chartYoY'); barChart(c2, st.yoy.map(v=>v*100), labels, 2); bindTooltip(c2,(cv,x,y)=> insideBar(cv._bars||[],x,y)); const cum=[]; vals.reduce((a,b,i)=> cum[i]=a+b, 0); const c3=$('chartYCum'); lineChart(c3, cum, labels, 1); bindTooltip(c3,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const roll=[]; for(let i=0;i<vals.length;i++){ const s=vals.slice(Math.max(0,i-2), i+1); roll.push(s.reduce((a,b)=>a+b,0)/s.length); } const c4=$('chartRoll'); lineChart(c4, roll, labels, 4); bindTooltip(c4,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c5=$('chartHist'); histChart(c5, vals, Math.min(vals.length,6), 5); bindTooltip(c5,(cv,x,y)=> insideBar(cv._bars||[],x,y)); const top=[...vals].sort((a,b)=>b-a).slice(0,5); const rest=Math.max(0, st.sum - top.reduce((a,b)=>a+b,0)); const c6=$('chartPie'); pieChart(c6, [...top, rest]); bindTooltip(c6,(cv,x,y)=> insideSlice(cv,x,y)); const c7=$('chartDD'); lineChart(c7, st.ddSeries.map(v=>v*100), labels, 6); bindTooltip(c7,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c8=$('chartVol'); lineChart(c8, st.rollVol, labels, 7); bindTooltip(c8,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const xs = conv.map(o=>o.year); const ys = st.yoy.map(v=>v*100); const c9=$('chartScatter'); scatterChart(c9, xs.slice(1), ys.slice(1), 8); bindTooltip(c9,(cv,x,y)=> nearPoint(cv._points||[],x,y)); const c10=$('chartLastVs'); barChart(c10, [lastVsAvg*100], [lang==='ar'?'الأخيرة مقابل المتوسط':'Last vs Avg'], 9); bindTooltip(c10,(cv,x,y)=> insideBar(cv._bars||[],x,y)); }
 
 // ---------- wiring & tabs ----------
-function populateCurrencySelect(el){ el.innerHTML = CURRENCIES.map(c=>`<option value="${c}">${c}</option>`).join(''); }
 function wire(){
+  $('langToggle').addEventListener('click',()=> setLang(lang==='en'?'ar':'en'));
+
+  // inputs
   $('total').addEventListener('input', ()=>{ calc(); drawYearInsights(); save(); });
   $('inCur').addEventListener('change', ()=> setInputCurrency($('inCur').value));
   $('outCur').addEventListener('change', ()=> setDisplayCurrency($('outCur').value));
-  // Insights copies
+
+  // insights currency (independent controls)
   $('inCurInsights').addEventListener('change', ()=> setInputCurrency($('inCurInsights').value));
   $('outCurInsights').addEventListener('change', ()=> setDisplayCurrency($('outCurInsights').value));
 
@@ -449,23 +429,10 @@ function wire(){
 
   $('tabDash').addEventListener('click', ()=>{ $('tabDash').classList.add('active'); $('tabInsights').classList.remove('active'); $('panelDash').style.display='block'; $('panelInsights').style.display='none'; });
   $('tabInsights').addEventListener('click', ()=>{ $('tabInsights').classList.add('active'); $('tabDash').classList.remove('active'); $('panelDash').style.display='none'; $('panelInsights').style.display='block'; drawYearInsights(); });
-
-  // language switch
-  $('btnAr').addEventListener('click', ()=>{ lang='ar'; $('btnAr').classList.add('active'); $('btnEn').classList.remove('active'); applyI18n(); renderYears(); calc(); drawYearInsights(); save(); });
-  $('btnEn').addEventListener('click', ()=>{ lang='en'; $('btnEn').classList.add('active'); $('btnAr').classList.remove('active'); applyI18n(); renderYears(); calc(); drawYearInsights(); save(); });
 }
 
 function updateRatesUI(){ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ $(k.toLowerCase()+"Rate").value = exchangeRates[k]; }); }
 
-(function init(){
-  // populate selects
-  [ 'inCur','outCur','inCurInsights','outCurInsights' ].forEach(id=> populateCurrencySelect($(id)) );
-  $('inCur').value='USD'; $('outCur').value='USD'; $('inCurInsights').value='USD'; $('outCurInsights').value='USD';
-  load();
-  // reflect saved lang state in buttons
-  if(lang==='ar'){ $('btnAr').classList.add('active'); $('btnEn').classList.remove('active'); } else { $('btnEn').classList.add('active'); $('btnAr').classList.remove('active'); }
-  applyI18n(); wire(); calc(); renderYears(); drawYearInsights();
-})();
-</script>
-</body>
+(function init(){ ['inCur','outCur','inCurInsights','outCurInsights'].forEach(id=>{ const el=$(id); if(!el) return; el.innerHTML = CURRENCIES.map(c=>`<option value="${c}">${c}</option>`).join(''); }); if(!$('inCur').value) $('inCur').value='USD'; if(!$('outCur').value) $('outCur').value='USD'; if($('inCurInsights') && !$('inCurInsights').value) $('inCurInsights').value=$('inCur').value; if($('outCurInsights') && !$('outCurInsights').value) $('outCurInsights').value=$('outCur').value; load(); applyI18n(); wire(); calc(); renderYears(); drawYearInsights(); })();
+</script></body>
 </html>
