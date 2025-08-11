@@ -1,42 +1,46 @@
 <!DOCTYPE html><html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Super Earnings Pace — Dashboard + Yearly Insights</title>
-
-  <!-- Arabic font for flawless RTL rendering -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root{
       --bg:#0a0a0a; --surface:#0f0f0f; --muted:#9a9a9a; --text:#f6f6f6; --line:#1e1e1e; --accent:#ebebeb; --chip:#151515;
-      --tooltip:#111; --tooltipBorder:#2a2a2a; --sp:14px; --sp-lg:18px;
       --c1:#7dd3fc; --c2:#a7f3d0; --c3:#fca5a5; --c4:#fde68a; --c5:#c4b5fd; --c6:#f9a8d4; --c7:#93c5fd; --c8:#6ee7b7; --c9:#fcd34d; --c10:#fdba74;
+      --tooltip:#111; --tooltipBorder:#2a2a2a; --sp:14px; --sp-lg:18px;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text)}
-    /* font stacks */
-    html:not(.rtl) body{font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,system-ui,sans-serif;}
-    html.rtl body{
-      font-family:"IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    }
-    html.rtl *{letter-spacing:0 !important; text-transform:none;}
+    body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,system-ui,sans-serif;background:var(--bg);color:var(--text)}
     .wrap{max-width:1180px;margin:0 auto;padding:20px;display:grid;gap:var(--sp-lg)}
+    /* ---------------- Header ---------------- */
     .head{display:flex;gap:12px;align-items:center}
     .title{font-size:18px;font-weight:800}
     .hint{color:var(--muted);font-size:13px}
     .chip{padding:8px 10px;background:var(--chip);border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}
-    .right{margin-left:auto} /* keep header layout stable even in RTL */
-
+    .right{margin-left:auto}
     #langToggle{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#0c0c0c;color:#f6f6f6;font-weight:800;cursor:pointer}
 
+    /* ---------------- Tiny switch + icon btn ---------------- */
+    .icon-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#0c0c0c;color:#f6f6f6;font-size:12px;cursor:pointer}
+    .icon{width:14px;height:14px;display:inline-block}
+    .spin{animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .switch{position:relative;display:inline-block;width:34px;height:18px}
+    .switch input{opacity:0;width:0;height:0}
+    .switch .slider{position:absolute;inset:0;background:#222;border:1px solid var(--line);border-radius:999px;transition:.18s}
+    .switch .slider:before{content:"";position:absolute;height:14px;width:14px;left:2px;top:1px;background:#777;border-radius:50%;transition:.18s}
+    .switch input:checked + .slider{background:var(--accent)}
+    .switch input:checked + .slider:before{transform:translateX(16px);background:#000}
+
+    /* ---------------- Tabs ---------------- */
     .tabs{display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:2}
     .tabbtn{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:#0c0c0c;color:#f6f6f6;cursor:pointer;font-weight:700;transition:transform .12s ease}
     .tabbtn:hover{transform:translateY(-1px)}
     .tabbtn.active{background:var(--accent);color:#000;box-shadow:0 0 0 2px #000 inset}
     .tabspace{background:rgba(10,10,10,.92);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:6px}
 
+    /* ---------------- Forms & Layout ---------------- */
     .dock{background:rgba(10,10,10,.92);border:1px solid var(--line);border-radius:14px;padding:16px}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--sp)}
     .c-2{grid-column:span 2}.c-3{grid-column:span 3}.c-4{grid-column:span 4}.c-5{grid-column:span 5}.c-6{grid-column:span 6}.c-7{grid-column:span 7}.c-8{grid-column:span 8}.c-12{grid-column:span 12}
@@ -46,13 +50,13 @@
     .btn{background:var(--accent);color:#000;border:none;font-weight:700;cursor:pointer}
     .btn:active{transform:translateY(1px)}
 
+    /* ---------------- KPI cards ---------------- */
     .cards{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--sp)}
     @media (max-width:1120px){.cards{grid-template-columns:repeat(3,1fr)}}
     @media (max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:420px){.cards{grid-template-columns:1fr}}
     .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
     .k{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-    html.rtl .k{letter-spacing:0}
     .v{font-size:24px;font-weight:800;margin-top:6px}
 
     .section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:var(--sp)}
@@ -74,19 +78,27 @@
     .other .c{font-size:11px;color:var(--muted)}
     .other .n{font-size:16px;font-weight:700;margin-top:4px}
 
+    /* ---------------- Modal ---------------- */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center}
     .modal.open{display:flex}
     .modal-content{width:min(720px,92vw);background:#0c0c0c;border:1px solid var(--line);border-radius:16px;padding:16px}
     .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
     .row{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp)}
 
+    /* ---------------- Canvas ---------------- */
     canvas{width:100%;height:280px;border:1px solid var(--line);border-radius:12px;background:#0b0b0b;image-rendering:crisp-edges}
     .mini{height:200px}
 
+    /* ---------------- Tooltip ---------------- */
     .tt{position:fixed;pointer-events:none;background:var(--tooltip);border:1px solid var(--tooltipBorder);padding:8px 10px;border-radius:10px;color:#eee;font-size:12px;transform:translate(-50%,-120%);display:none;white-space:nowrap}
 
-    /* RTL basics */
+    /* ---------------- Subtle value bump on change ---------------- */
+    .bump{animation:bump .28s ease}
+    @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+    /* ---------------- RTL overrides ---------------- */
     html.rtl{direction:rtl}
+    html.rtl .right{margin-left:0;margin-right:auto}
     html.rtl .tabs{flex-direction:row-reverse}
     html.rtl .grid{direction:rtl}
     html.rtl label, html.rtl .k, html.rtl .hint, html.rtl .t, html.rtl .d {text-align:right}
@@ -94,19 +106,21 @@
 </head>
 <body>
   <div class="wrap">
+    <!-- Clean header (no extra controls) -->
     <div class="head">
       <div class="title" id="t_title">Super Earnings Pace</div>
       <div class="hint" id="t_sub">Manual rates · clean pace · smart + fun facts</div>
       <span class="right"></span>
-      <button id="langToggle" class="chip">عربي / EN</button>
+      <button id="langToggle" class="chip" title="Switch language">AR / EN</button>
     </div>
 
+    <!-- Tabs -->
     <div class="tabs">
       <button class="tabbtn active" id="tabDash">Dashboard</button>
       <button class="tabbtn" id="tabInsights">Insights Lab</button>
     </div>
 
-    <!-- DASHBOARD -->
+    <!-- ================= DASHBOARD ================= -->
     <div class="tabspace" id="panelDash">
       <div class="dock">
         <div class="grid">
@@ -122,10 +136,12 @@
             <label id="t_outcur">Display currency</label>
             <select id="outCur"></select>
           </div>
+          <!-- Manual FX editor (no refresh here per request) -->
           <div class="c-2"><label>&nbsp;</label><button class="btn" id="openRates">Rates</button></div>
         </div>
       </div>
 
+      <!-- KPI strip -->
       <div class="cards">
         <div class="card"><div class="k" id="t_persec">Per second</div><div class="v" id="perSec">0.00</div></div>
         <div class="card"><div class="k" id="t_permin">Per minute</div><div class="v" id="perMin">0.00</div></div>
@@ -135,6 +151,7 @@
         <div class="card"><div class="k" id="t_permon">Per month (avg)</div><div class="v" id="perMon">0.00</div></div>
       </div>
 
+      <!-- Year progress -->
       <div class="section">
         <h2 id="t_yearprog">Year progress</h2>
         <div style="display:flex;gap:12px;align-items:center">
@@ -144,11 +161,13 @@
         </div>
       </div>
 
+      <!-- Other currencies -->
       <div class="section">
         <h2 id="t_othercurr">Earned until now — other currencies</h2>
         <div class="other-grid" id="otherList"></div>
       </div>
 
+      <!-- Smart facts -->
       <div class="section">
         <h2 id="t_smartfacts">Smart facts</h2>
         <div class="facts">
@@ -178,7 +197,7 @@
       </details>
     </div>
 
-    <!-- INSIGHTS -->
+    <!-- ================= INSIGHTS ================= -->
     <div class="tabspace" id="panelInsights" style="display:none">
       <div class="dock">
         <div class="grid">
@@ -190,28 +209,23 @@
             <label id="t_outcur_ins">Display currency</label>
             <select id="outCurInsights"></select>
           </div>
-
-          <!-- EGP Historical Adjustment (local, no API) -->
-          <div class="c-4">
-            <label id="t_egpadj_label">تعديل تاريخي للجنيه (USD/EGP)</label>
-            <div style="display:flex;gap:8px;align-items:center">
-              <label class="chip" style="display:flex;align-items:center;gap:8px">
-                <input id="egpAdjToggle" type="checkbox" style="width:auto"> <span id="t_egpadj_on">شغّال</span>
-              </label>
-              <button class="btn" id="openEgpHist"><span id="t_egp_table_btn">أسعار السنين</span></button>
-            </div>
-            <small class="hint" id="t_egp_hint">المعادلة بتحوّل جنيه كل سنة لدولار بسعرها وقتها.. وترجّعه لجنيه بقيمة النهارده.. وبعدين تعرض بعملة العرض.</small>
-          </div>
-
           <div class="c-6">
             <label id="t_yearlytot">Yearly totals</label>
             <div id="yearsTable"></div>
           </div>
           <div class="c-1"><label>&nbsp;</label><button class="btn" id="addRow">+ Add</button></div>
           <div class="c-1"><label>&nbsp;</label><button class="btn" id="loadSample">Sample</button></div>
-
           <div class="c-12">
             <small class="hint" id="t_dataset_hint">Dataset uses the Input currency. All metrics/charts auto-convert to Display currency.</small>
+          </div>
+
+          <!-- Small historical EGP switch (Insights-only) -->
+          <div class="c-12" style="display:flex;align-items:center;gap:10px">
+            <label id="t_histfx_label" class="hint">Use historical USD/EGP (Insights only)</label>
+            <label class="switch" title="Use historical USD/EGP for yearly insights">
+              <input id="useHistFX" type="checkbox"/>
+              <span class="slider"></span>
+            </label>
           </div>
         </div>
       </div>
@@ -234,29 +248,34 @@
       <div class="section">
         <h2 id="t_charts">Charts</h2>
         <div class="grid">
-          <div class="c-6"><label id="t_c_yline">Yearly totals</label><canvas id="chartYLine"></canvas><small class="hint" id="t_c_yline_hint">Line chart of yearly totals in Display currency. Hover for details.</small></div>
-          <div class="c-6"><label id="t_c_yoy">YoY growth %</label><canvas id="chartYoY"></canvas><small class="hint" id="t_c_yoy_hint">Bar chart of year-over-year growth (percentage). Hover to see exact %.</small></div>
-          <div class="c-6"><label id="t_c_cum">Cumulative total</label><canvas id="chartYCum" class="mini"></canvas><small class="hint" id="t_c_cum_hint">Sum of all years up to each point. Shows compounding progress.</small></div>
-          <div class="c-6"><label id="t_c_roll">Rolling 3-yr average</label><canvas id="chartRoll" class="mini"></canvas><small class="hint" id="t_c_roll_hint">Smoother trend line using last 3 years' average.</small></div>
-          <div class="c-6"><label id="t_c_hist">Histogram</label><canvas id="chartHist" class="mini"></canvas><small class="hint" id="t_c_hist_hint">Distribution of yearly totals (how values cluster).</small></div>
-          <div class="c-6"><label id="t_c_pie">Top-5 share</label><canvas id="chartPie" class="mini"></canvas><small class="hint" id="t_c_pie_hint">Top 5 years vs the rest.</small></div>
-          <div class="c-6"><label id="t_c_dd">Drawdown</label><canvas id="chartDD" class="mini"></canvas><small class="hint" id="t_c_dd_hint">Drop from prior peak, % (risk view).</small></div>
-          <div class="c-6"><label id="t_c_vol">Rolling volatility</label><canvas id="chartVol" class="mini"></canvas><small class="hint" id="t_c_vol_hint">Std dev of last 3 years (stability).</small></div>
-          <div class="c-6"><label id="t_c_scatter">Growth scatter</label><canvas id="chartScatter" class="mini"></canvas><small class="hint" id="t_c_scatter_hint">Year vs growth %. Closer to top = stronger growth.</small></div>
-          <div class="c-6"><label id="t_c_lastvs">Last vs avg bar</label><canvas id="chartLastVs" class="mini"></canvas><small class="hint" id="t_c_lastvs_hint">How the latest year compares to historical average.</small></div>
+          <div class="c-6"><label id="t_c_yline">Yearly totals</label><canvas id="chartYLine" aria-label="Yearly totals line"></canvas><small class="hint" id="t_c_yline_hint">Line chart of yearly totals in Display currency. Hover for details.</small></div>
+          <div class="c-6"><label id="t_c_yoy">YoY growth %</label><canvas id="chartYoY" aria-label="YoY growth"></canvas><small class="hint" id="t_c_yoy_hint">Bar chart of year-over-year growth (percentage). Hover to see exact %.</small></div>
+          <div class="c-6"><label id="t_c_cum">Cumulative total</label><canvas id="chartYCum" class="mini" aria-label="Cumulative"></canvas><small class="hint" id="t_c_cum_hint">Sum of all years up to each point. Shows compounding progress.</small></div>
+          <div class="c-6"><label id="t_c_roll">Rolling 3-yr average</label><canvas id="chartRoll" class="mini" aria-label="Rolling avg"></canvas><small class="hint" id="t_c_roll_hint">Smoother trend line using last 3 years' average.</small></div>
+          <div class="c-6"><label id="t_c_hist">Histogram</label><canvas id="chartHist" class="mini" aria-label="Histogram"></canvas><small class="hint" id="t_c_hist_hint">Distribution of yearly totals (how values cluster).</small></div>
+          <div class="c-6"><label id="t_c_pie">Top-5 share</label><canvas id="chartPie" class="mini" aria-label="Top 5 share"></canvas><small class="hint" id="t_c_pie_hint">Top 5 years vs the rest.</small></div>
+          <div class="c-6"><label id="t_c_dd">Drawdown</label><canvas id="chartDD" class="mini" aria-label="Drawdown"></canvas><small class="hint" id="t_c_dd_hint">Drop from prior peak, % (risk view).</small></div>
+          <div class="c-6"><label id="t_c_vol">Rolling volatility</label><canvas id="chartVol" class="mini" aria-label="Volatility"></canvas><small class="hint" id="t_c_vol_hint">Std dev of last 3 years (stability).</small></div>
+          <div class="c-6"><label id="t_c_scatter">Growth scatter</label><canvas id="chartScatter" class="mini" aria-label="Growth scatter"></canvas><small class="hint" id="t_c_scatter_hint">Year vs growth %. Closer to top = stronger growth.</small></div>
+          <div class="c-6"><label id="t_c_lastvs">Last vs avg bar</label><canvas id="chartLastVs" class="mini" aria-label="Last vs avg"></canvas><small class="hint" id="t_c_lastvs_hint">How the latest year compares to historical average.</small></div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Tooltip -->
-  <div class="tt" id="tooltip"></div>
+  <div class="tt" id="tooltip" aria-live="polite"></div>
 
-  <!-- Rates modal -->
+  <!-- Rates modal (manual + API refresh inside only) -->
   <div class="modal" id="ratesModal">
     <div class="modal-content" role="dialog" aria-labelledby="ratesTitle">
       <div class="modal-header">
         <h3 id="ratesTitle">Currency rates (base USD = 1.00)</h3>
+        <button class="icon-btn" id="refreshRatesInModal" title="Refresh via API">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.5 9A9 9 0 0 1 21 8"/><path d="M20.5 15A9 9 0 0 1 3 16"/>
+          </svg>
+        </button>
       </div>
       <div class="row">
         <div><label>USD</label><input id="usdRate" type="number" step="0.01" value="1.00" readonly></div>
@@ -277,314 +296,363 @@
     </div>
   </div>
 
-  <!-- Local historical USD/EGP editor -->
-  <div class="modal" id="egpHistModal">
-    <div class="modal-content" role="dialog" aria-labelledby="egpHistTitle">
-      <div class="modal-header">
-        <h3 id="egpHistTitle">USD/EGP — متوسط سنوي (لوكال)</h3>
-      </div>
-      <div id="egpHistTable" style="max-height:50vh;overflow:auto;margin-bottom:10px"></div>
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button class="btn" id="egpClose">إغلاق</button>
-        <button class="btn" id="egpSave">حفظ</button>
-      </div>
-    </div>
-  </div>
+  <script>
+    // ============================ HELPERS & STATE ============================
+    const $ = (id)=>document.getElementById(id);
+    const CURRENCIES=['USD','EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'];
+    const PAL=['#7dd3fc','#a7f3d0','#fca5a5','#fde68a','#c4b5fd','#f9a8d4','#93c5fd','#6ee7b7','#fcd34d','#fdba74'];
 
-<script>
-/* ---------- helpers / state ---------- */
-const $=(id)=>document.getElementById(id);
-const CURRENCIES=['USD','EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'];
-const PAL=['#7dd3fc','#a7f3d0','#fca5a5','#fde68a','#c4b5fd','#f9a8d4','#93c5fd','#6ee7b7','#fcd34d','#fdba74'];
-const fmt=(n)=>((+n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-let exchangeRates={USD:1.00,EGP:50.00,SAR:3.75,KWD:0.30,AED:3.67,EUR:0.92,GBP:0.78,QAR:3.64,OMR:0.384,BHD:0.376};
-const stateKey='super_earnings_tabs_v6';
-let years=[]; let currentOutC='USD';
+    let LOCALE='en-US';
+    let nf = new Intl.NumberFormat(LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2});
+    const fmt = (n)=> nf.format(Number.isFinite(n)? n : 0);
 
-/* Local historical USD/EGP averages (Year -> EGP per 1 USD)
-   NOTE: قابلة للتعديل من واجهة "أسعار السنين".
-   الأرقام أدناه متوسطات سنوية تقريبًا (WB/IMF) حتى 2023.. و2024-2025 محدثة بقيمة سوق قريبة.
-*/
-let egpUsdHistory={
-  2000:3.47,2001:3.88,2002:4.50,2003:6.20,2004:6.10,2005:5.78,2006:5.72,2007:5.64,2008:5.44,2009:5.55,
-  2010:5.69,2011:5.93,2012:6.18,2013:6.87,2014:7.15,2015:7.75,2016:10.00,2017:17.80,2018:17.70,2019:16.80,
-  2020:15.75,2021:15.70,2022:18.80,2023:30.00,2024:48.00,2025:48.00
-};
-let egpAdjustOn=false;
+    // Manual FX (1 USD -> X currency)
+    let exchangeRates = {USD:1.00,EGP:50.00,SAR:3.75,KWD:0.30,AED:3.67,EUR:0.92,GBP:0.78,QAR:3.64,OMR:0.384,BHD:0.376};
 
-/* i18n */
-const i18n={
-  en:{
-    tabDash:'Dashboard', tabInsights:'Insights Lab',
-    t_total_label:'Total earned to date', t_incur:'Input currency', t_outcur:'Display currency', btnRates:'Rates',
-    t_persec:'Per second', t_permin:'Per minute', t_perhr:'Per hour', t_perday:'Per day', t_perwk:'Per week', t_permon:'Per month (avg)',
-    t_yearprog:'Year progress', t_othercurr:'Earned until now — other currencies',
-    t_smartfacts:'Smart facts', t_proj:'Projected year total', t_sincemid:'Earned since midnight', t_sinceweek:'Earned this week', t_sincemonth:'Earned this month',
-    t_funfacts:'Show fun facts 🎈',
-    t_incur_ins:'Input currency', t_outcur_ins:'Display currency', t_yearlytot:'Yearly totals', t_dataset_hint:'Dataset uses the Input currency. All metrics/charts auto-convert to Display currency.',
-    t_yearscovered:'Years covered', t_totalall:'Total (all years)', t_avgyear:'Average / year', t_median:'Median / year', t_bestyear:'Best year', t_worstyear:'Worst year', t_cagr:'CAGR', t_cv:'Volatility (σ/avg)', t_hit:'Growth hit-rate', t_mdd:'Max drawdown', t_lastvsavg:'Last vs avg', t_lastyoy:'Last YoY growth',
-    t_charts:'Charts', t_c_yline:'Yearly totals', t_c_yline_hint:'Line chart of yearly totals in Display currency. Hover for details.', t_c_yoy:'YoY growth %', t_c_yoy_hint:'Bar chart of year-over-year growth (percentage). Hover to see exact %.', t_c_cum:'Cumulative total', t_c_cum_hint:'Sum of all years up to each point. Shows compounding progress.', t_c_roll:'Rolling 3-yr average', t_c_roll_hint:'Smoother trend line using last 3 years\' average.', t_c_hist:'Histogram', t_c_hist_hint:'Distribution of yearly totals.', t_c_pie:'Top-5 share', t_c_pie_hint:'Top 5 years vs the rest.', t_c_dd:'Drawdown', t_c_dd_hint:'Drop from prior peak, % (risk view).', t_c_vol:'Rolling volatility', t_c_vol_hint:'Std dev of last 3 years (stability).', t_c_scatter:'Growth scatter', t_c_scatter_hint:'Year vs growth %. Closer to top = stronger growth.', t_c_lastvs:'Last vs avg bar', t_c_lastvs_hint:'How the latest year compares to historical average.',
-    ratesTitle:'Currency rates (base USD = 1.00)', btnClose:'Close', btnSave:'Save', btnAdd:'+ Add', btnSample:'Sample'
-  },
-  ar:{
-    tabDash:'اللوحة', tabInsights:'معمل الإحصائيات',
-    t_total_label:'الإجمالي لحد دلوقتي', t_incur:'عملة الإدخال', t_outcur:'عملة العرض', btnRates:'أسعار الصرف',
-    t_persec:'في الثانية', t_permin:'في الدقيقة', t_perhr:'في الساعة', t_perday:'في اليوم', t_perwk:'في الأسبوع', t_permon:'في الشهر (متوسط)',
-    t_yearprog:'تقدّم السنة', t_othercurr:'الإجمالي لحد دلوقتي — عملات تانية',
-    t_smartfacts:'أرقام سريعة', t_proj:'إجمالي متوقّع آخر السنة', t_sincemid:'من بعد نص الليل', t_sinceweek:'من أول الأسبوع', t_sincemonth:'من أول الشهر',
-    t_funfacts:'اعرض حاجات لطيفة 🎈',
-    t_incur_ins:'عملة الإدخال', t_outcur_ins:'عملة العرض', t_yearlytot:'إجماليات سنوية', t_dataset_hint:'البيانات بعملة الإدخال.. والرسوم بتتحوّل تلقائي لعملة العرض.',
-    t_yearscovered:'عدد السنين', t_totalall:'الإجمالي (كل السنين)', t_avgyear:'متوسط/سنة', t_median:'الوسيط/سنة', t_bestyear:'أعلى سنة', t_worstyear:'أقل سنة', t_cagr:'معدل نمو مركّب', t_cv:'تذبذب (σ/متوسط)', t_hit:'سنين النمو', t_mdd:'أقصى تراجع', t_lastvsavg:'آخر سنة مقابل المتوسط', t_lastyoy:'نمو آخر سنة عن اللي قبلها',
-    t_charts:'رسوم بيانية', t_c_yline:'الإجمالي السنوي', t_c_yline_hint:'خط للإجماليات السنوية.. مرّر للبيانات.', t_c_yoy:'نسبة النمو سنة لسنة', t_c_yoy_hint:'الأعمدة بتوضح النسبة.', t_c_cum:'مجموع تراكمي', t_c_cum_hint:'تجميع عبر السنين.', t_c_roll:'متوسط ٣ سنين متحرك', t_c_roll_hint:'متوسط آخر ٣ سنين.', t_c_hist:'توزيع القيم', t_c_hist_hint:'القيم بتتجمع فين.', t_c_pie:'أعلى ٥ سنين', t_c_pie_hint:'أعلى خمس سنين مقابل الباقي.', t_c_dd:'تراجع من القمة', t_c_dd_hint:'نزول عن أعلى قيمة %.', t_c_vol:'تذبذب متحرك', t_c_vol_hint:'انحراف معياري (٣ سنين).', t_c_scatter:'نِقاط النمو', t_c_scatter_hint:'السنة مقابل نسبة النمو.', t_c_lastvs:'آخر سنة vs المتوسط', t_c_lastvs_hint:'مقارنة السنة الأخيرة بالمتوسط.',
-  }
-};
-let lang='en';
+    const stateKey='super_earnings_tabs_v8';
+    let years=[];
+    let currentOutC='USD';
+    let lang='en';
 
-function applyI18n(){
-  const dict=i18n[lang];
-  Object.keys(dict).forEach(id=>{
-    if(id==='t_title'||id==='t_sub') return; // keep header fixed
-    const el=$(id); if(el) el.textContent=dict[id];
-  });
-  const mapBtn={ openRates:'btnRates', addRow:'btnAdd', loadSample:'btnSample' };
-  Object.entries(mapBtn).forEach(([domId,key])=>{ const el=$(domId); if(el && dict[key]) el.textContent=dict[key]; });
-  document.documentElement.lang=(lang==='ar'?'ar':'en');
-  document.documentElement.classList.toggle('rtl', lang==='ar');
-}
-function setLang(next){ lang=next; applyI18n(); renderYears(); drawYearInsights(); save(); }
+    // Historical EGP/USD (Insights-only)
+    let useHistFX=false;
+    const HIST_EGP_USD={
+      2000:3.47,2001:3.85,2002:4.28,2003:6.15,2004:6.20,
+      2005:5.78,2006:5.74,2007:5.64,2008:5.43,2009:5.60,
+      2010:5.62,2011:5.95,2012:6.06,2013:6.87,2014:7.15,
+      2015:7.73,2016:12.50,2017:17.80,2018:17.90,2019:16.70,
+      2020:15.70,2021:15.70,2022:24.70,2023:30.90,2024:48.00,2025:50.00
+    };
 
-/* persistence */
-function save(){
-  const s={ total:$('total').value, inCur:$('inCur').value, outCur:$('outCur').value,
-    years, rates:exchangeRates, lang, egpUsdHistory, egpAdjustOn };
-  localStorage.setItem(stateKey, JSON.stringify(s));
-}
-function load(){
-  const saved=localStorage.getItem(stateKey); if(!saved) return;
-  try{ const s=JSON.parse(saved);
-    ['total','inCur','outCur'].forEach(k=>{ if(s[k]!==undefined && $(k)) $(k).value=s[k]; });
-    if(s.rates) exchangeRates={...exchangeRates,...s.rates};
-    if(Array.isArray(s.years)) years=s.years;
-    if(s.lang) lang=s.lang;
-    if(s.egpUsdHistory) egpUsdHistory=s.egpUsdHistory;
-    if(typeof s.egpAdjustOn==='boolean') egpAdjustOn=s.egpAdjustOn;
-  }catch(e){}
-}
+    // ================================ i18n ================================
+    const i18n={
+      en:{
+        t_title:'Super Earnings Pace', t_sub:'Manual rates · clean pace · smart + fun facts',
+        tabDash:'Dashboard', tabInsights:'Insights Lab',
+        t_total_label:'Total earned to date', t_incur:'Input currency', t_outcur:'Display currency',
+        t_persec:'Per second', t_permin:'Per minute', t_perhr:'Per hour', t_perday:'Per day', t_perwk:'Per week', t_permon:'Per month (avg)',
+        t_yearprog:'Year progress', t_othercurr:'Earned until now — other currencies',
+        t_smartfacts:'Smart facts', t_proj:'Projected year total', t_sincemid:'Earned since midnight', t_sinceweek:'Earned this week', t_sincemonth:'Earned this month',
+        t_funfacts:'Show fun facts 🎈',
+        t_match:'Per football match (90m)', t_episode:'Per Netflix episode (45m)', t_coffee:'Per coffee run (7m)', t_shower:'Per shower (8m)', t_song:'Per song (3m30s)', t_penalty:'Penalty shootout (5m)', t_traffic:'Traffic light cycle (90s)', t_espresso:'Espresso shot pull (30s)', t_diaper:'Diaper change (2m)', t_voice:'WhatsApp voice note (1m)', t_micro:'Microwave dinner (3m)', t_brush:'Toothbrushing (2m30s)',
+        t_incur_ins:'Input currency', t_outcur_ins:'Display currency', t_yearlytot:'Yearly totals', t_dataset_hint:'Dataset uses the Input currency. All metrics/charts auto-convert to Display currency.',
+        t_yearscovered:'Years covered', t_totalall:'Total (all years)', t_avgyear:'Average / year', t_median:'Median / year', t_bestyear:'Best year', t_worstyear:'Worst year', t_cagr:'CAGR', t_cv:'Volatility (σ/avg)', t_hit:'Growth hit-rate', t_mdd:'Max drawdown', t_lastvsavg:'Last vs avg', t_lastyoy:'Last YoY growth',
+        t_charts:'Charts', t_c_yline:'Yearly totals', t_c_yline_hint:'Line chart of yearly totals in Display currency. Hover for details.', t_c_yoy:'YoY growth %', t_c_yoy_hint:'Bar chart of year-over-year growth (percentage). Hover to see exact %.', t_c_cum:'Cumulative total', t_c_cum_hint:'Sum of all years up to each point. Shows compounding progress.', t_c_roll:"Rolling 3-yr average", t_c_roll_hint:"Smoother trend line using last 3 years' average.", t_c_hist:'Histogram', t_c_hist_hint:'Distribution of yearly totals.', t_c_pie:'Top-5 share', t_c_pie_hint:'Top 5 years vs the rest.', t_c_dd:'Drawdown', t_c_dd_hint:'Drop from prior peak, % (risk view).', t_c_vol:'Rolling volatility', t_c_vol_hint:'Std dev of last 3 years (stability).', t_c_scatter:'Growth scatter', t_c_scatter_hint:'Year vs growth %. Closer to top = stronger growth.', t_c_lastvs:'Last vs avg bar', t_c_lastvs_hint:'How the latest year compares to historical average.',
+        t_histfx_label:'Use historical USD/EGP (Insights only)'
+      },
+      ar:{
+        t_title:'مؤشّر وتيرة الأرباح', t_sub:'أسعار يدويّة · عرض نضيف · حقايق ذكيّة ومسلّية',
+        tabDash:'الداشبورد', tabInsights:'معمل الإنسايتس',
+        t_total_label:'المحصّل لحد دلوقتي', t_incur:'عملة الإدخال', t_outcur:'عملة العرض',
+        t_persec:'في الثانية', t_permin:'في الدقيقة', t_perhr:'في الساعة', t_perday:'في اليوم', t_perwk:'في الأسبوع', t_permon:'في الشهر (متوسط)',
+        t_yearprog:'تقدّم السنة', t_othercurr:'المحصّل حتى الآن — بعملات تانية',
+        t_smartfacts:'حقايق ذكيّة', t_proj:'الإجمالي المتوقع لنهاية السنة', t_sincemid:'من بعد نص الليل', t_sinceweek:'من أول الأسبوع', t_sincemonth:'من أول الشهر',
+        t_funfacts:'اعرض حقايق لطيفة 🎈',
+        t_match:'ماتش كورة (90 د)', t_episode:'حلقة نتفلكس (45 د)', t_coffee:'مشوار قهوة (7 د)', t_shower:'دش سريع (8 د)', t_song:'أغنية (3 د 30 ث)', t_penalty:'ضربات ترجيح (5 د)', t_traffic:'إشارة مرور (90 ث)', t_espresso:'شوت إسبرسو (30 ث)', t_diaper:'تغيير حفّاضة (2 د)', t_voice:'فويس نوت (1 د)', t_micro:'عشاء مايكروويف (3 د)', t_brush:'سنان (2 د 30 ث)',
+        t_incur_ins:'عملة الإدخال', t_outcur_ins:'عملة العرض', t_yearlytot:'إجمالي السنين', t_dataset_hint:'البيانات بعملة الإدخال وكل القياسات بتتحوّل تلقائي لعملة العرض.',
+        t_yearscovered:'عدد السنين', t_totalall:'الإجمالي (كل السنين)', t_avgyear:'متوسط/سنة', t_median:'الوسيط/سنة', t_bestyear:'أعلى سنة', t_worstyear:'أقل سنة', t_cagr:'معدل النمو المركّب', t_cv:'تذبذب (σ/متوسط)', t_hit:'سنين طلوع', t_mdd:'أقصى هبوط', t_lastvsavg:'الأخيرة مقابل المتوسط', t_lastyoy:'نمو سنة بسنة',
+        t_charts:'رسوم بيانية', t_c_yline:'الإجماليات السنوية', t_c_yline_hint:'خط بيعرض الإجمالي السنوي بعملة العرض. حرّك للفاصيل.', t_c_yoy:'نمو % سنة بسنة', t_c_yoy_hint:'أعمدة للنسب. حرّك للمعلومة.', t_c_cum:'إجمالي تراكمي', t_c_cum_hint:'جمع السنين لحد كل نقطة.', t_c_roll:'متوسط 3 سنين', t_c_roll_hint:'خط أنعم بمتوسط آخر 3 سنين.', t_c_hist:'هستوجرام', t_c_hist_hint:'توزيع الإجماليات.', t_c_pie:'نسبة أفضل 5 سنين', t_c_pie_hint:'أعلى 5 سنين مقابل الباقي.', t_c_dd:'هبوط من القمة', t_c_dd_hint:'الفرق عن أعلى قيمة %.', t_c_vol:'تذبذب متحرك', t_c_vol_hint:'انحراف معياري لآخر 3 سنين.', t_c_scatter:'سكاتر النمو', t_c_scatter_hint:'السنة مقابل نسبة النمو.', t_c_lastvs:'الأخيرة مقابل المتوسط', t_c_lastvs_hint:'مقارنة آخر سنة بالمتوسط.',
+        t_histfx_label:'فعّل السعر التاريخي دولار/جنيه (الإنسايتس بس)'
+      }
+    };
 
-/* currency + conversion */
-function convert(amount,from,to){ if(!amount) return 0; const usd=amount/(exchangeRates[from]||1); return usd*(exchangeRates[to]||1); }
-function setInputCurrency(cur){ if(CURRENCIES.includes(cur)){ $('inCur').value=cur; $('inCurInsights').value=cur; renderYears(); calc(); drawYearInsights(); save(); } }
-function setDisplayCurrency(cur){ if(CURRENCIES.includes(cur)){ $('outCur').value=cur; $('outCurInsights').value=cur; currentOutC=cur; calc(); drawYearInsights(); save(); } }
+    function applyI18n(){
+      const dict=i18n[lang];
+      for(const key in dict){ const el=$(key); if(el) el.textContent=dict[key]; }
+      document.documentElement.lang = lang==='ar'?'ar':'en';
+      document.documentElement.classList.toggle('rtl', lang==='ar');
+      // button label: keep English-only when lang=en
+      $('langToggle').textContent = (lang==='ar') ? 'عربي / EN' : 'AR / EN';
+      LOCALE = lang==='ar'? 'ar-EG' : 'en-US';
+      nf = new Intl.NumberFormat(LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+    function setLang(next){ lang=next; applyI18n(); renderYears(); drawYearInsights(); save(); }
 
-/* years table */
-function renderYears(){
-  const wrap=$('yearsTable'); if(!wrap) return; wrap.innerHTML='';
-  const table=document.createElement('div'); table.style.display='grid'; table.style.gridTemplateColumns='140px 1fr 100px'; table.style.gap='12px';
-  const head=[ lang==='ar'?'السنة':'Year', `${i18n[lang].t_totalall} (${($('inCur').value||'USD')})`, '' ];
-  head.forEach(t=>{ const h=document.createElement('div'); h.style.color='#9a9a9a'; h.style.fontSize='12px'; h.textContent=t; table.appendChild(h); });
-  years.forEach((row,idx)=>{
-    const y=document.createElement('input'); y.type='number'; y.value=row.year; y.min=1900; y.max=9999; y.step=1;
-    const v=document.createElement('input'); v.type='number'; v.step='0.01'; v.min='0'; v.value=row.value;
-    const del=document.createElement('button'); del.className='btn'; del.textContent= lang==='ar'?'حذف':'Delete';
-    y.addEventListener('input',()=>{ years[idx].year=parseInt(y.value||0,10); drawYearInsights(); save(); });
-    v.addEventListener('input',()=>{ years[idx].value=parseFloat(v.value||0); drawYearInsights(); save(); });
-    del.addEventListener('click',()=>{ years.splice(idx,1); renderYears(); drawYearInsights(); save(); });
-    table.appendChild(y); table.appendChild(v); table.appendChild(del);
-  });
-  wrap.appendChild(table);
-}
+    // ============================== Persistence ==============================
+    function save(){
+      const s={ total:$('total').value, inCur:$('inCur').value, outCur:$('outCur').value, years, rates:exchangeRates, lang, useHistFX };
+      localStorage.setItem(stateKey, JSON.stringify(s));
+    }
+    function load(){
+      const saved = localStorage.getItem(stateKey); if(!saved) return;
+      try{
+        const s=JSON.parse(saved);
+        ['total','inCur','outCur'].forEach(k=>{ if(s[k]!==undefined && $(k)) $(k).value=s[k]; });
+        if(s.rates) exchangeRates={...exchangeRates, ...s.rates};
+        if(Array.isArray(s.years)) years=s.years;
+        if(s.lang) lang=s.lang;
+        if(typeof s.useHistFX==='boolean') useHistFX=s.useHistFX;
+      }catch(e){}
+    }
 
-/* dashboard calc */
-function calc(){
-  const totalRaw=parseFloat($('total').value)||0; const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; currentOutC=outC;
-  const now=new Date(); const start=new Date(now.getFullYear(),0,1); start.setHours(0,0,0,0);
-  const endYear=new Date(now.getFullYear(),11,31,23,59,59,999);
-
-  const total=convert(totalRaw,inC,outC);
-
-  const elapsedMs=now-start, yearMs=endYear-start; const daysInYear=Math.floor((endYear-start)/86400000)+1;
-  const elapsedHours=Math.max(elapsedMs/3600000,1e-9);
-  const perHour=total/elapsedHours, perMinute=perHour/60, perSecond=perMinute/60, perDay=perHour*24, perWeek=perDay*7, perMonth=perDay*(daysInYear/12);
-
-  $('perSec').textContent=fmt(perSecond); $('perMin').textContent=fmt(perMinute); $('perHr').textContent=fmt(perHour); $('perDay').textContent=fmt(perDay); $('perWk').textContent=fmt(perWeek); $('perMon').textContent=fmt(perMonth);
-
-  const yearPct=Math.min((elapsedMs/yearMs)*100,100); $('yBar').style.width=yearPct.toFixed(2)+'%'; $('yPct').textContent=yearPct.toFixed(1)+'%';
-  const dayNumber=Math.floor((now-start)/86400000)+1; $('elapsedLabel').textContent=(lang==='ar'?`اليوم ${dayNumber} من ${daysInYear}`:`day ${dayNumber} of ${daysInYear}`);
-
-  $('proj').textContent=`${fmt(perHour*(daysInYear*24))} ${outC}`;
-
-  const sinceMidnightHours=(now-new Date(now.getFullYear(),now.getMonth(),now.getDate()))/3600000; $('sinceDay').textContent=`${fmt(perHour*sinceMidnightHours)} ${outC}`;
-  const sow=(d=>{ const x=new Date(d); const day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); x.setHours(0,0,0,0); return x; })(now);
-  const hoursWeek=(now-sow)/3600000; $('sinceWeek').textContent=`${fmt(perHour*hoursWeek)} ${outC}`;
-  const som=new Date(now.getFullYear(), now.getMonth(), 1); som.setHours(0,0,0,0);
-  const hoursMonth=(now-som)/3600000; $('sinceMonth').textContent=`${fmt(perHour*hoursMonth)} ${outC}`;
-
-  const f=(m)=>fmt(perMinute*m)+' '+outC;
-  $('perMatch').textContent=f(90); $('perEpisode').textContent=f(45); $('perCoffee').textContent=f(7); $('perShower').textContent=f(8); $('perSong').textContent=f(3.5); $('perPenalty').textContent=f(5);
-  $('perTraffic').textContent=fmt(perSecond*90)+' '+outC; $('perEspresso').textContent=fmt(perSecond*30)+' '+outC; $('perDiaper').textContent=f(2); $('perVoice').textContent=f(1); $('perMicrowave').textContent=f(3); $('perBrush').textContent=f(2.5);
-
-  renderOtherCurrencies(totalRaw,inC);
-}
-function renderOtherCurrencies(totalRaw,inC){
-  const list=$('otherList'); list.innerHTML='';
-  CURRENCIES.filter(c=>c!==inC).forEach(c=>{
-    const val=convert(totalRaw,inC,c); const div=document.createElement('div'); div.className='other';
-    div.innerHTML=`<div class="c">${c}</div><div class="n">${fmt(val)}</div>`; list.appendChild(div);
-  });
-}
-
-/* charts */
-function setupCanvas(c){ const dpr=window.devicePixelRatio||1; const w=c.clientWidth,h=c.clientHeight; c.width=Math.floor(w*dpr); c.height=Math.floor(h*dpr); const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return ctx; }
-function drawValue(ctx,x,y,text){ ctx.fillStyle="#dcdcdc"; ctx.font="12px system-ui"; ctx.textAlign='center'; ctx.fillText(text,x,y-8); }
-function lineChart(canvas,data,labels,colorIdx=0){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth,h=canvas.clientHeight,pad=30; ctx.clearRect(0,0,w,h); let min=Math.min(...data),max=Math.max(...data); if(min===max){min-=1;max+=1;} const xstep=(w-2*pad)/Math.max(data.length-1,1); const y=(v)=>{ const t=(v-min)/(max-min); return h-pad - t*(h-2*pad); }; ctx.strokeStyle="#222"; ctx.lineWidth=1; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.lineWidth=2.5; ctx.strokeStyle=PAL[colorIdx%PAL.length]; ctx.beginPath(); data.forEach((v,i)=>{ const xx=pad+i*xstep,yy=y(v); if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); }); ctx.stroke(); ctx.fillStyle=PAL[colorIdx%PAL.length]; data.forEach((v,i)=>{ const xx=pad+i*xstep,yy=y(v); ctx.beginPath(); ctx.arc(xx,yy,3,0,Math.PI*2); ctx.fill(); drawValue(ctx,xx,yy,fmt(v)); }); ctx.fillStyle="#9a9a9a"; ctx.font="12px system-ui"; labels.forEach((lab,i)=>{ const xx=pad+i*xstep; ctx.fillText(lab,xx-12,h-8); }); canvas._points=data.map((v,i)=>({x:pad+i*xstep,y:y(v),v,label:labels[i]})); }
-function barChart(canvas,data,labels,colorIdx=2){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth,h=canvas.clientHeight,pad=30; ctx.clearRect(0,0,w,h); const max=Math.max(...data.map(v=>Math.abs(v)),1); const zeroY=h-pad - (0 - (-max))/(2*max)*(h-2*pad); const barW=(w-2*pad)/data.length*0.6; ctx.strokeStyle="#222"; ctx.lineWidth=1; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._bars=[]; data.forEach((v,i)=>{ const x=pad+(i+0.2)*(w-2*pad)/data.length; const hgt=(Math.abs(v)/max)*(h-2*pad); const y=v>=0?zeroY-hgt:zeroY; ctx.fillRect(x,y,barW,hgt); drawValue(ctx,x+barW/2,y,(v).toFixed(1)); canvas._bars.push({x,y,w:barW,h:hgt,v,label:labels[i]}); }); ctx.fillStyle="#9a9a9a"; ctx.font="12px system-ui"; labels.forEach((lab,i)=>{ const x=pad+(i+0.2)*(w-2*pad)/data.length; ctx.fillText(lab,x,h-8); }); }
-function histChart(canvas,data,bins=6,colorIdx=4){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth,h=canvas.clientHeight,pad=30; ctx.clearRect(0,0,w,h); const min=Math.min(...data),max=Math.max(...data); const width=(max-min)/bins||1; const counts=new Array(bins).fill(0); data.forEach(v=>{ let idx=Math.floor((v-min)/width); if(idx>=bins) idx=bins-1; if(idx<0) idx=0; counts[idx]++; }); const maxC=Math.max(...counts,1); const barW=(w-2*pad)/bins*0.7; ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._bars=[]; counts.forEach((c,i)=>{ const x=pad+(i+0.15)*(w-2*pad)/bins; const hgt=(c/maxC)*(h-2*pad); const y=h-pad-hgt; ctx.fillRect(x,y,barW,hgt); drawValue(ctx,x+barW/2,y,c); canvas._bars.push({x,y,w:barW,h:hgt,v:c,label:`Bin ${i+1}`}); }); }
-function pieChart(canvas,data){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth,h=canvas.clientHeight; ctx.clearRect(0,0,w,h); const cx=w/2,cy=h/2; const r=Math.min(w,h)/2-20; const sum=data.reduce((a,b)=>a+b,0)||1; let a0=-Math.PI/2; canvas._slices=[]; data.forEach((v,i)=>{ const a1=a0+2*Math.PI*(v/sum); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,a0,a1); ctx.closePath(); ctx.fillStyle=PAL[i%PAL.length]; ctx.fill(); ctx.strokeStyle="#222"; ctx.stroke(); const mid=(a0+a1)/2; const lx=cx+Math.cos(mid)*(r*0.62), ly=cy+Math.sin(mid)*(r*0.62); const pct=((v/sum)*100).toFixed(1)+'%'; drawValue(ctx,lx,ly,pct); canvas._slices.push({a0,a1,value:v,pct}); a0=a1; }); }
-function scatterChart(canvas,xs,ys,colorIdx=6){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth,h=canvas.clientHeight,pad=30; ctx.clearRect(0,0,w,h); const xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys); const x=(v)=>pad+((v-xmin)/(xmax-xmin||1))*(w-2*pad), y=(v)=>h-pad-((v-ymin)/(ymax-ymin||1))*(h-2*pad); ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._points=[]; xs.forEach((vx,i)=>{ const px=x(vx),py=y(ys[i]); ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill(); drawValue(ctx,px,py,ys[i].toFixed(1)); canvas._points.push({x:px,y:py,label:vx,v:ys[i]}); }); }
-
-/* tooltips */
-function bindTooltip(canvas,accessor){
-  const tt=$('tooltip');
-  canvas.addEventListener('mousemove',(e)=>{
-    const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
-    const hit=accessor(canvas,x,y);
-    if(hit){ tt.style.display='block'; tt.style.left=e.clientX+'px'; tt.style.top=e.clientY+'px'; tt.innerHTML=`<b>${hit.label}</b><br/>${fmt(hit.v)} ${currentOutC}${hit.suffix?' '+hit.suffix:''}`; }
-    else tt.style.display='none';
-  });
-  canvas.addEventListener('mouseleave',()=>{ $('tooltip').style.display='none'; });
-}
-function nearPoint(points,x,y){ let m=null,d2=25; points.forEach(p=>{ const dd=(p.x-x)*(p.x-x)+(p.y-y)*(p.y-y); if(dd<d2){m=p;d2=dd;} }); return m; }
-function insideBar(bars,x,y){ for(const b of bars){ if(x>=b.x && x<=b.x+b.w && y>=b.y && y<=b.y+b.h) return b; } return null; }
-function insideSlice(canvas,x,y){ if(!canvas._slices) return null; const r=Math.min(canvas.clientWidth,canvas.clientHeight)/2-20; const cx=canvas.clientWidth/2, cy=canvas.clientHeight/2; const dx=x-cx, dy=y-cy; const dist=Math.sqrt(dx*dx+dy*dy); if(dist>r) return null; let ang=Math.atan2(dy,dx); if(ang<-Math.PI/2) ang+=2*Math.PI; for(const s of canvas._slices){ if(ang>=s.a0 && ang<=s.a1) return {label:'Slice', v:s.value, suffix:`(${s.pct})`}; } return null; }
-
-/* yearly stats + FX adjustment */
-function statsYears(arr){
-  const n=arr.length; if(!n) return null;
-  const vals=arr.map(o=>o.value);
-  const sum=vals.reduce((a,b)=>a+b,0), avg=sum/n;
-  const sorted=[...vals].sort((a,b)=>a-b); const median = n%2? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2;
-  let bestI=0,worstI=0; for(let i=1;i<n;i++){ if(vals[i]>vals[bestI]) bestI=i; if(vals[i]<vals[worstI]) worstI=i; }
-  const variance=vals.reduce((a,b)=>a+(b-avg)*(b-avg),0)/n, sd=Math.sqrt(variance), cv=avg?sd/avg:0;
-  const first=vals[0], last=vals[n-1];
-  const yearsSpan=Math.max(arr[n-1].year - arr[0].year, n-1);
-  const cagr=(yearsSpan>0 && first>0)? Math.pow(last/first,1/yearsSpan)-1 : 0;
-  const yoy=vals.map((v,i)=> i===0?0:(vals[i-1]===0?0:(v/vals[i-1]-1)));
-  const hitRate=yoy.slice(1).filter(g=>g>0).length/Math.max(n-1,1);
-  let peak=vals[0], mdd=0; const ddSeries=[0];
-  for(let i=1;i<n;i++){ peak=Math.max(peak,vals[i-1]); const dd=peak? (vals[i]-peak)/peak : 0; mdd=Math.min(mdd,dd); ddSeries.push(dd); }
-  const rollVol=[]; for(let i=0;i<n;i++){ const s=vals.slice(Math.max(0,i-2),i+1); const mu=s.reduce((a,b)=>a+b,0)/s.length; const vv=s.reduce((a,b)=>a+(b-mu)*(b-mu),0)/s.length; rollVol.push(Math.sqrt(vv)); }
-  return {sum,avg,median,bestI,worstI,cv,cagr,yoy,hitRate,mdd,ddSeries,rollVol,last,first};
-}
-
-function drawYearInsights(){
-  const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; currentOutC=outC;
-  if(years.length===0){
-    ['yYears','yTotal','yAvg','yMedian','yBest','yWorst','yCAGR','yCV','yHit','yMDD','yLastVsAvg','yLastYoY'].forEach(id=>$(id).textContent='—');
-    ['chartYLine','chartYoY','chartYCum','chartRoll','chartHist','chartPie','chartDD','chartVol','chartScatter','chartLastVs'].forEach(id=>{ const c=$(id); const ctx=setupCanvas(c); ctx.clearRect(0,0,c.clientWidth,c.clientHeight); }); return;
-  }
-  const series=years.slice().sort((a,b)=>a.year-b.year);
-  const egpToday=exchangeRates['EGP'];
-
-  const conv=series.map(o=>{
-    if(egpAdjustOn && inC==='EGP'){
-      const y=o.year, yRate=egpUsdHistory[y];
-      if(yRate && egpToday){
-        const usdThen = o.value / yRate;      // EGP_y -> USD at year y
-        const egpNow  = usdThen * egpToday;   // USD -> EGP at today's rate
-        return {year:y, value: convert(egpNow,'EGP',outC)};
+    // ============================== Currency (API) ===========================
+    async function fetchRates(){
+      const btn = $('refreshRatesInModal');
+      btn?.querySelector('svg')?.classList.add('spin');
+      try{
+        const ctrl = new AbortController();
+        const t = setTimeout(()=>ctrl.abort(), 8000);
+        const res = await fetch('https://open.er-api.com/v6/latest/USD', {signal:ctrl.signal});
+        clearTimeout(t);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const data = await res.json();
+        if(data && data.result==='success' && data.rates){
+          const r = data.rates;
+          const map = {USD:1, EGP:r.EGP, SAR:r.SAR, KWD:r.KWD, AED:r.AED, EUR:r.EUR, GBP:r.GBP, QAR:r.QAR, OMR:r.OMR, BHD:r.BHD};
+          Object.keys(map).forEach(k=>{
+            const v = map[k];
+            if(typeof v==='number' && isFinite(v) && v>0){ exchangeRates[k]=v; }
+          });
+          updateRatesUI();
+          save();
+          // recalc twice to ensure UI sync after API & locale swap edge-cases
+          calc(); drawYearInsights();
+          requestAnimationFrame(()=>{ calc(); drawYearInsights(); });
+        } else { throw new Error('Bad payload'); }
+      } catch(err){
+        $('t_title')?.classList.add('bump'); setTimeout(()=>$('t_title')?.classList.remove('bump'),300);
+      } finally{
+        btn?.querySelector('svg')?.classList.remove('spin');
       }
     }
-    return {year:o.year, value: convert(o.value,inC,outC)};
-  });
 
-  const labels=conv.map(o=>String(o.year)); const vals=conv.map(o=>o.value); const st=statsYears(conv);
+    // Year-aware convert (Insights uses historical EGP when enabled)
+    function convert(amount, from, to, year){
+      if(!amount) return 0;
+      const needsEGP = (from==='EGP' || to==='EGP');
+      const rateFor = (cur, y) => {
+        if(useHistFX && needsEGP && Number.isInteger(y) && cur==='EGP'){
+          return HIST_EGP_USD[y] ?? exchangeRates[cur];
+        }
+        return exchangeRates[cur];
+      };
+      const usd = amount / (rateFor(from, year) || 1);
+      return usd * (rateFor(to, year) || 1);
+    }
+    function setInputCurrency(cur){ if(CURRENCIES.includes(cur)){ $('inCur').value=cur; $('inCurInsights').value=cur; renderYears(); calc(); drawYearInsights(); save(); } }
+    function setDisplayCurrency(cur){ if(CURRENCIES.includes(cur)){ $('outCur').value=cur; $('outCurInsights').value=cur; currentOutC=cur; calc(); drawYearInsights(); save(); } }
 
-  $('yYears').textContent=conv.length;
-  $('yTotal').textContent=`${fmt(st.sum)} ${outC}`;
-  $('yAvg').textContent=`${fmt(st.avg)} ${outC}`;
-  $('yMedian').textContent=`${fmt(st.median)} ${outC}`;
-  $('yBest').textContent=`${labels[st.bestI]} · ${fmt(vals[st.bestI])} ${outC}`;
-  $('yWorst').textContent=`${labels[st.worstI]} · ${fmt(vals[st.worstI])} ${outC}`;
-  $('yCAGR').textContent=`${(st.cagr*100).toFixed(2)}%`;
-  $('yCV').textContent=`${(st.cv*100).toFixed(1)}%`;
-  $('yHit').textContent=`${(st.hitRate*100).toFixed(0)}% ${lang==='ar'?'سنين نمو':'up years'}`;
-  $('yMDD').textContent=`${(st.mdd*100).toFixed(1)}%`;
-  const lastVsAvg=st.avg? (st.last/st.avg - 1):0; $('yLastVsAvg').textContent=`${(lastVsAvg*100).toFixed(1)}%`;
-  const lastYoY=st.yoy.length>1? st.yoy[st.yoy.length-1] : 0; $('yLastYoY').textContent=`${(lastYoY*100).toFixed(1)}%`;
+    // ============================== Years table ==============================
+    function renderYears(){
+      const wrap=$('yearsTable'); if(!wrap) return; wrap.innerHTML='';
+      const table=document.createElement('div'); table.style.display='grid'; table.style.gridTemplateColumns='140px 1fr 100px'; table.style.gap='12px';
+      const head=[ i18n[lang].t_yearlytot, i18n[lang].t_totalall+` (${($('inCur').value||'USD')})`, '' ];
+      head.forEach(t=>{ const h=document.createElement('div'); h.style.color='#9a9a9a'; h.style.fontSize='12px'; h.textContent=t; table.appendChild(h); });
+      years.forEach((row,idx)=>{
+        const y=document.createElement('input'); y.type='number'; y.value=row.year; y.min=1900; y.max=9999; y.step=1;
+        const v=document.createElement('input'); v.type='number'; v.step='0.01'; v.min='0'; v.value=row.value;
+        const del=document.createElement('button'); del.className='btn'; del.textContent = lang==='ar'? 'حذف' : 'Delete';
+        y.addEventListener('input',()=>{ years[idx].year=parseInt(y.value||0,10); drawYearInsights(); save(); });
+        v.addEventListener('input',()=>{ years[idx].value=parseFloat(v.value||0); drawYearInsights(); save(); });
+        del.addEventListener('click',()=>{ years.splice(idx,1); renderYears(); drawYearInsights(); save(); });
+        table.appendChild(y); table.appendChild(v); table.appendChild(del);
+      });
+      wrap.appendChild(table);
+    }
 
-  const c1=$('chartYLine'); lineChart(c1,vals,labels,0); bindTooltip(c1,(cv,x,y)=>nearPoint(cv._points||[],x,y));
-  const c2=$('chartYoY'); barChart(c2,st.yoy.map(v=>v*100),labels,2); bindTooltip(c2,(cv,x,y)=>insideBar(cv._bars||[],x,y));
-  const cum=[]; vals.reduce((a,b,i)=>cum[i]=a+b,0); const c3=$('chartYCum'); lineChart(c3,cum,labels,1); bindTooltip(c3,(cv,x,y)=>nearPoint(cv._points||[],x,y));
-  const roll=[]; for(let i=0;i<vals.length;i++){ const s=vals.slice(Math.max(0,i-2),i+1); roll.push(s.reduce((a,b)=>a+b,0)/s.length); } const c4=$('chartRoll'); lineChart(c4,roll,labels,4); bindTooltip(c4,(cv,x,y)=>nearPoint(cv._points||[],x,y));
-  const c5=$('chartHist'); histChart(c5,vals,Math.min(vals.length,6),5); bindTooltip(c5,(cv,x,y)=>insideBar(cv._bars||[],x,y));
-  const top=[...vals].sort((a,b)=>b-a).slice(0,5); const rest=Math.max(0,st.sum - top.reduce((a,b)=>a+b,0)); const c6=$('chartPie'); pieChart(c6,[...top,rest]); bindTooltip(c6,(cv,x,y)=>insideSlice(cv,x,y));
-  const c7=$('chartDD'); lineChart(c7,st.ddSeries.map(v=>v*100),labels,6); bindTooltip(c7,(cv,x,y)=>nearPoint(cv._points||[],x,y));
-  const c8=$('chartVol'); lineChart(c8,st.rollVol,labels,7); bindTooltip(c8,(cv,x,y)=>nearPoint(cv._points||[],x,y));
-  const xs=conv.map(o=>o.year), ys=st.yoy.map(v=>v*100); const c9=$('chartScatter'); scatterChart(c9,xs.slice(1),ys.slice(1),8); bindTooltip(c9,(cv,x,y)=>nearPoint(cv._points||[],x,y));
-  const c10=$('chartLastVs'); barChart(c10,[lastVsAvg*100],[lang==='ar'?'آخر سنة مقابل المتوسط':'Last vs Avg'],9); bindTooltip(c10,(cv,x,y)=>insideBar(cv._bars||[],x,y));
-}
+    // ============================== Bump helper ==============================
+    function setTextBump(id, next){
+      const el=$(id); if(!el) return;
+      const prev = el.textContent;
+      if(prev!==next){ el.textContent=next; el.classList.add('bump'); setTimeout(()=>el.classList.remove('bump'),300); }
+    }
 
-/* wiring */
-function wire(){
-  $('langToggle').addEventListener('click',()=>setLang(lang==='en'?'ar':'en'));
+    // ============================== Dashboard calc ===========================
+    function calc(){
+      const totalRaw=parseFloat($('total').value)||0; const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; currentOutC=outC;
+      const now=new Date();
+      const start=new Date(now.getFullYear(),0,1,0,0,0,0);
+      const endYear=new Date(now.getFullYear(),11,31,23,59,59,999);
+      const total = convert(totalRaw, inC, outC); // dashboard = current rates only
+      const elapsedMs = now - start; const yearMs = endYear - start;
+      const daysInYear = Math.floor((endYear-start)/86400000)+1;
 
-  $('total').addEventListener('input',()=>{ calc(); drawYearInsights(); save(); });
-  $('inCur').addEventListener('change',()=>setInputCurrency($('inCur').value));
-  $('outCur').addEventListener('change',()=>setDisplayCurrency($('outCur').value));
-  $('inCurInsights').addEventListener('change',()=>setInputCurrency($('inCurInsights').value));
-  $('outCurInsights').addEventListener('change',()=>setDisplayCurrency($('outCurInsights').value));
+      const elapsedHours = Math.max(elapsedMs/3600000, 1e-9);
+      const perHour = total/elapsedHours; const perMinute=perHour/60; const perSecond=perMinute/60; const perDay=perHour*24; const perWeek=perDay*7; const perMonth=perDay*(daysInYear/12);
 
-  $('openRates').addEventListener('click',()=>{ updateRatesUI(); $('ratesModal').classList.add('open'); });
-  $('cancelRates').addEventListener('click',()=>$('ratesModal').classList.remove('open'));
-  $('saveRates').addEventListener('click',()=>{ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ exchangeRates[k]=parseFloat($(k.toLowerCase()+'Rate').value)||exchangeRates[k]; }); $('ratesModal').classList.remove('open'); save(); calc(); drawYearInsights(); });
+      setTextBump('perSec', fmt(perSecond));
+      setTextBump('perMin', fmt(perMinute));
+      setTextBump('perHr',  fmt(perHour));
+      setTextBump('perDay', fmt(perDay));
+      setTextBump('perWk',  fmt(perWeek));
+      setTextBump('perMon', fmt(perMonth));
 
-  $('addRow').addEventListener('click',()=>{ const y=years.length? (Math.max(...years.map(r=>r.year))+1):(new Date().getFullYear()); years.push({year:y,value:0}); renderYears(); drawYearInsights(); save(); });
-  $('loadSample').addEventListener('click',()=>{ years=[{year:2020,value:8037},{year:2021,value:11325},{year:2022,value:17549},{year:2023,value:13794},{year:2024,value:10892},{year:2025,value:11988},]; renderYears(); drawYearInsights(); save(); });
+      const yearPct=Math.min((elapsedMs/yearMs)*100,100);
+      $('yBar').style.width=yearPct.toFixed(2)+'%';
+      setTextBump('yPct', yearPct.toFixed(1)+'%');
+      const dayNumber = Math.floor((now-start)/86400000)+1;
+      setTextBump('elapsedLabel', (lang==='ar'?`اليوم ${dayNumber} من ${daysInYear}`:`day ${dayNumber} of ${daysInYear}`));
 
-  // EGP historical modal
-  $('egpAdjToggle').checked=egpAdjustOn;
-  $('egpAdjToggle').addEventListener('change',(e)=>{ egpAdjustOn=e.target.checked; save(); drawYearInsights(); });
+      setTextBump('proj',        `${fmt(perHour*(daysInYear*24))} ${outC}`);
+      const sinceMidnightHours=(now-new Date(now.getFullYear(),now.getMonth(),now.getDate()))/3600000; setTextBump('sinceDay',   `${fmt(perHour*sinceMidnightHours)} ${outC}`);
+      const sow=(d=>{ const x=new Date(d); const day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); x.setHours(0,0,0,0); return x; })(now);
+      const hoursWeek=(now-sow)/3600000; setTextBump('sinceWeek', `${fmt(perHour*hoursWeek)} ${outC}`);
+      const som=new Date(now.getFullYear(), now.getMonth(), 1); som.setHours(0,0,0,0);
+      const hoursMonth=(now-som)/3600000; setTextBump('sinceMonth',`${fmt(perHour*hoursMonth)} ${outC}`);
 
-  $('openEgpHist').addEventListener('click',()=>{ buildEgpTable(); $('egpHistModal').classList.add('open'); });
-  $('egpClose').addEventListener('click',()=>$('egpHistModal').classList.remove('open'));
-  $('egpSave').addEventListener('click',()=>{ readEgpTable(); save(); $('egpHistModal').classList.remove('open'); drawYearInsights(); });
+      const perSec   = total/Math.max((now-start)/1000, 1e-6);
+      const perMin   = perSec*60; const f = (m)=>fmt(perMin*m)+' '+outC;
+      setTextBump('perMatch',f(90)); setTextBump('perEpisode',f(45)); setTextBump('perCoffee',f(7)); setTextBump('perShower',f(8));
+      setTextBump('perSong',f(3.5)); setTextBump('perPenalty',f(5));
+      setTextBump('perTraffic', fmt(perSec*90)+' '+outC); setTextBump('perEspresso', fmt(perSec*30)+' '+outC);
+      setTextBump('perDiaper', f(2)); setTextBump('perVoice', f(1)); setTextBump('perMicrowave', f(3)); setTextBump('perBrush', f(2.5));
 
-  $('tabDash').addEventListener('click',()=>{ $('tabDash').classList.add('active'); $('tabInsights').classList.remove('active'); $('panelDash').style.display='block'; $('panelInsights').style.display='none'; });
-  $('tabInsights').addEventListener('click',()=>{ $('tabInsights').classList.add('active'); $('tabDash').classList.remove('active'); $('panelDash').style.display='none'; $('panelInsights').style.display='block'; drawYearInsights(); });
-}
-function updateRatesUI(){ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ $(k.toLowerCase()+'Rate').value=exchangeRates[k]; }); }
+      renderOtherCurrencies(totalRaw, inC);
+    }
 
-/* EGP history editor */
-function buildEgpTable(){
-  const box=$('egpHistTable'); box.innerHTML='';
-  const grid=document.createElement('div');
-  grid.style.display='grid'; grid.style.gridTemplateColumns='100px 1fr'; grid.style.gap='8px';
-  ;['السنة','USD/EGP'].forEach(t=>{ const h=document.createElement('div'); h.style.color='#9a9a9a'; h.style.fontSize='12px'; h.textContent=t; grid.appendChild(h); });
-  const y0=2000, y1=Math.max(2000,new Date().getFullYear());
-  for(let y=y0;y<=y1;y++){
-    const yc=document.createElement('div'); yc.textContent=y; yc.style.padding='8px 0';
-    const v=document.createElement('input'); v.type='number'; v.step='0.001'; v.min='0'; v.value=(egpUsdHistory[y]??''); v.dataset.year=y;
-    grid.appendChild(yc); grid.appendChild(v);
-  }
-  box.appendChild(grid);
-}
-function readEgpTable(){
-  const inputs=$('egpHistTable').querySelectorAll('input[type="number"]');
-  inputs.forEach(inp=>{ const y=+inp.dataset.year, val=parseFloat(inp.value); if(!isNaN(val)&&val>0) egpUsdHistory[y]=val; });
-}
+    function renderOtherCurrencies(totalRaw, inC){
+      const list=$('otherList'); list.innerHTML='';
+      CURRENCIES.filter(c=>c!==inC).forEach(c=>{
+        const val = convert(totalRaw, inC, c);
+        const div=document.createElement('div');
+        div.className='other';
+        div.innerHTML=`<div class="c">${c}</div><div class="n">${fmt(val)}</div>`;
+        list.appendChild(div);
+        setTimeout(()=>div.classList.add('bump'),0); setTimeout(()=>div.classList.remove('bump'),300);
+      });
+    }
 
-/* init */
-(function init(){
-  ['inCur','outCur','inCurInsights','outCurInsights'].forEach(id=>{
-    const el=$(id); if(!el) return; el.innerHTML=CURRENCIES.map(c=>`<option value="${c}">${c}</option>`).join('');
-  });
-  if(!$('inCur').value) $('inCur').value='USD';
-  if(!$('outCur').value) $('outCur').value='USD';
-  if($('inCurInsights')&&!$('inCurInsights').value) $('inCurInsights').value=$('inCur').value;
-  if($('outCurInsights')&&!$('outCurInsights').value) $('outCurInsights').value=$('outCur').value;
+    // ============================== Charts (custom) ==========================
+    function setupCanvas(c){ const dpr=window.devicePixelRatio||1; const w=c.clientWidth; const h=c.clientHeight; c.width=Math.floor(w*dpr); c.height=Math.floor(h*dpr); const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return ctx; }
+    function drawValue(ctx, x, y, text){ ctx.fillStyle="#dcdcdc"; ctx.font="12px system-ui"; ctx.textAlign='center'; ctx.fillText(text, x, y-8); }
+    function lineChart(canvas, data, labels, colorIdx=0){
+      const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h);
+      let min=Math.min(...data), max=Math.max(...data); if(min===max){ min-=1; max+=1; }
+      const xstep=(w-2*pad)/Math.max(data.length-1,1); const y=(v)=>{ const t=(v-min)/(max-min); return h-pad - t*(h-2*pad); };
+      ctx.strokeStyle="#222"; ctx.lineWidth=1; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); }
+      ctx.lineWidth=2.5; ctx.strokeStyle=PAL[colorIdx%PAL.length]; ctx.beginPath(); data.forEach((v,i)=>{ const xx=pad+i*xstep; const yy=y(v); if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); }); ctx.stroke();
+      ctx.fillStyle=PAL[colorIdx%PAL.length]; data.forEach((v,i)=>{ const xx=pad+i*xstep; const yy=y(v); ctx.beginPath(); ctx.arc(xx,yy,3,0,Math.PI*2); ctx.fill(); drawValue(ctx, xx, yy, fmt(v)); });
+      ctx.fillStyle="#9a9a9a"; ctx.font="12px system-ui"; labels.forEach((lab,i)=>{ const xx=pad+i*xstep; ctx.fillText(lab, xx-12, h-8); });
+      canvas._points = data.map((v,i)=>({x:pad+i*xstep, y:y(v), v, label:labels[i]}));
+    }
+    function barChart(canvas, data, labels, colorIdx=2){
+      const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h);
+      const max=Math.max(...data.map(v=>Math.abs(v)), 1); const zeroY = h-pad - (0 - (-max))/(2*max)*(h-2*pad); const barW=(w-2*pad)/data.length * 0.6;
+      ctx.strokeStyle="#222"; ctx.lineWidth=1; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); }
+      ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._bars=[];
+      data.forEach((v,i)=>{ const x=pad + (i+0.2)*(w-2*pad)/data.length; const hgt=(Math.abs(v)/max)*(h-2*pad); const y = v>=0? zeroY - hgt : zeroY; ctx.fillRect(x, y, barW, hgt); drawValue(ctx, x+barW/2, y, (v).toFixed(1)); canvas._bars.push({x,y,w:barW,h:hgt,v,label:labels[i]}); });
+      ctx.fillStyle="#9a9a9a"; ctx.font="12px system-ui"; labels.forEach((lab,i)=>{ const x=pad + (i+0.2)*(w-2*pad)/data.length; ctx.fillText(lab, x, h-8); });
+    }
+    function histChart(canvas, data, bins=6, colorIdx=4){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h); const min=Math.min(...data), max=Math.max(...data); const width=(max-min)/bins || 1; const counts=new Array(bins).fill(0); data.forEach(v=>{ let idx=Math.floor((v-min)/width); if(idx>=bins) idx=bins-1; if(idx<0) idx=0; counts[idx]++; }); const maxC=Math.max(...counts,1); const barW=(w-2*pad)/bins*0.7; ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._bars=[]; counts.forEach((c,i)=>{ const x=pad + (i+0.15)*(w-2*pad)/bins; const hgt=(c/maxC)*(h-2*pad); const y=h-pad-hgt; ctx.fillRect(x, y, barW, hgt); drawValue(ctx, x+barW/2, y, c); canvas._bars.push({x,y,w:barW,h:hgt,v:c,label:`Bin ${i+1}`}); }); }
+    function pieChart(canvas, data){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight; ctx.clearRect(0,0,w,h); const cx=w/2, cy=h/2; const r=Math.min(w,h)/2 - 20; const sum=data.reduce((a,b)=>a+b,0)||1; let a0=-Math.PI/2; canvas._slices=[]; data.forEach((v,i)=>{ const a1=a0 + 2*Math.PI*(v/sum); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,a0,a1); ctx.closePath(); ctx.fillStyle=PAL[i%PAL.length]; ctx.fill(); ctx.strokeStyle="#222"; ctx.stroke(); const mid=(a0+a1)/2; const lx=cx+Math.cos(mid)*(r*0.62), ly=cy+Math.sin(mid)*(r*0.62); const pct=((v/sum)*100).toFixed(1)+'%'; drawValue(ctx, lx, ly, pct); canvas._slices.push({a0,a1,value:v,pct}); a0=a1; }); }
+    function scatterChart(canvas, xs, ys, colorIdx=6){ const ctx=setupCanvas(canvas); const w=canvas.clientWidth, h=canvas.clientHeight, pad=30; ctx.clearRect(0,0,w,h); const xmin=Math.min(...xs), xmax=Math.max(...xs), ymin=Math.min(...ys), ymax=Math.max(...ys); const x=(v)=> pad + ((v-xmin)/(xmax-xmin||1))*(w-2*pad), y=(v)=> h-pad - ((v-ymin)/(ymax-ymin||1))*(h-2*pad); ctx.strokeStyle="#222"; for(let i=0;i<5;i++){ const yy=pad+i*(h-2*pad)/4; ctx.beginPath(); ctx.moveTo(pad,yy); ctx.lineTo(w-pad,yy); ctx.stroke(); } ctx.fillStyle=PAL[colorIdx%PAL.length]; canvas._points=[]; xs.forEach((vx,i)=>{ const px=x(vx), py=y(ys[i]); ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill(); drawValue(ctx, px, py, ys[i].toFixed(1)); canvas._points.push({x:px,y:py,label:vx,v:ys[i]}); }); }
+    function bindTooltip(canvas, accessor){ const tt=$('tooltip'); canvas.addEventListener('mousemove', (e)=>{ const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top; const hit=accessor(canvas,x,y); if(hit){ tt.style.display='block'; tt.style.left=e.clientX+'px'; tt.style.top=e.clientY+'px'; tt.innerHTML = `<b>${hit.label}</b><br/>${fmt(hit.v)} ${currentOutC}`; } else { tt.style.display='none'; } }); canvas.addEventListener('mouseleave', ()=>{ $('tooltip').style.display='none'; }); }
 
-  load(); applyI18n(); wire(); calc(); renderYears(); drawYearInsights();
-})();
-</script>
+    // ============================== Yearly insights ==========================
+    function statsYears(arr){
+      const n=arr.length; if(!n) return null;
+      const vals = arr.map(o=>o.value);
+      const sum=vals.reduce((a,b)=>a+b,0);
+      const avg=sum/n;
+      const sorted=[...vals].sort((a,b)=>a-b);
+      const median = n%2? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2;
+      let bestI=0, worstI=0; for(let i=1;i<n;i++){ if(vals[i]>vals[bestI]) bestI=i; if(vals[i]<vals[worstI]) worstI=i; }
+      const variance = vals.reduce((a,b)=>a+(b-avg)*(b-avg),0)/n; const sd = Math.sqrt(variance); const cv = avg? sd/avg : 0;
+      const first = vals[0]; const last = vals[n-1];
+      const yearsSpan = Math.max(arr[n-1].year - arr[0].year, n-1);
+      const cagr = (yearsSpan>0 && first>0)? Math.pow(last/first, 1/yearsSpan)-1 : 0;
+      const yoy = vals.map((v,i)=> i===0? 0 : (vals[i-1]===0? 0 : (v/vals[i-1]-1)) );
+      const hitRate = yoy.slice(1).filter(g=>g>0).length / Math.max(n-1,1);
+      let peak=vals[0], mdd=0; const ddSeries=[0];
+      for(let i=1;i<n;i++){ peak=Math.max(peak, vals[i-1]); const dd = peak? (vals[i]-peak)/peak : 0; mdd = Math.min(mdd, dd); ddSeries.push(dd); }
+      const rollVol=[]; for(let i=0;i<n;i++){ const s=vals.slice(Math.max(0,i-2), i+1); const mu=s.reduce((a,b)=>a+b,0)/s.length; const vv=s.reduce((a,b)=>a+(b-mu)*(b-mu),0)/s.length; rollVol.push(Math.sqrt(vv)); }
+      return {sum,avg,median,bestI,worstI,cv,cagr,yoy,hitRate,mdd,ddSeries,rollVol,last,first};
+    }
+
+    function drawYearInsights(){
+      const inC=$('inCur').value||'USD'; const outC=$('outCur').value||'USD'; currentOutC=outC;
+      if(years.length===0){
+        ['yYears','yTotal','yAvg','yMedian','yBest','yWorst','yCAGR','yCV','yHit','yMDD','yLastVsAvg','yLastYoY'].forEach(id=>$(id).textContent='—');
+        ['chartYLine','chartYoY','chartYCum','chartRoll','chartHist','chartPie','chartDD','chartVol','chartScatter','chartLastVs'].forEach(id=>{ const c=$(id); const ctx=setupCanvas(c); ctx.clearRect(0,0,c.clientWidth,c.clientHeight); });
+        return;
+      }
+      const series = years.slice().sort((a,b)=>a.year-b.year);
+      // year-aware conversion here
+      const conv = series.map(o=> ({year:o.year, value: convert(o.value, inC, outC, o.year)}));
+      const labels = conv.map(o=>String(o.year));
+      const vals = conv.map(o=>o.value);
+
+      const st = statsYears(conv);
+      setTextBump('yYears', String(conv.length));
+      setTextBump('yTotal', `${fmt(st.sum)} ${outC}`);
+      setTextBump('yAvg',   `${fmt(st.avg)} ${outC}`);
+      setTextBump('yMedian',`${fmt(st.median)} ${outC}`);
+      setTextBump('yBest',  `${labels[st.bestI]} · ${fmt(vals[st.bestI])} ${outC}`);
+      setTextBump('yWorst', `${labels[st.worstI]} · ${fmt(vals[st.worstI])} ${outC}`);
+      setTextBump('yCAGR',  `${(st.cagr*100).toFixed(2)}%`);
+      setTextBump('yCV',    `${(st.cv*100).toFixed(1)}%`);
+      setTextBump('yHit',   `${(st.hitRate*100).toFixed(0)}% ${lang==='ar'?'سنين طلوع':'up years'}`);
+      setTextBump('yMDD',   `${(st.mdd*100).toFixed(1)}%`);
+      const lastVsAvg = st.avg? (st.last/st.avg - 1) : 0; setTextBump('yLastVsAvg', `${(lastVsAvg*100).toFixed(1)}%`);
+      const lastYoY = st.yoy.length>1? st.yoy[st.yoy.length-1] : 0; setTextBump('yLastYoY', `${(lastYoY*100).toFixed(1)}%`);
+
+      const c1=$('chartYLine'); lineChart(c1, vals, labels, 0); bindTooltip(c1,(cv,x,y)=> ({...nearest(cv._points,x,y)}));
+      const c2=$('chartYoY'); barChart(c2, st.yoy.map(v=>v*100), labels, 2); bindTooltip(c2,(cv,x,y)=> insideBar(cv._bars||[],x,y));
+      const cum=[]; vals.reduce((a,b,i)=> cum[i]=a+b, 0); const c3=$('chartYCum'); lineChart(c3, cum, labels, 1); bindTooltip(c3,(cv,x,y)=> nearest(cv._points,x,y));
+      const roll=[]; for(let i=0;i<vals.length;i++){ const s=vals.slice(Math.max(0,i-2), i+1); roll.push(s.reduce((a,b)=>a+b,0)/s.length); } const c4=$('chartRoll'); lineChart(c4, roll, labels, 4); bindTooltip(c4,(cv,x,y)=> nearest(cv._points,x,y));
+      const c5=$('chartHist'); histChart(c5, vals, Math.min(vals.length,6), 5); bindTooltip(c5,(cv,x,y)=> insideBar(cv._bars||[],x,y));
+      const top=[...vals].sort((a,b)=>b-a).slice(0,5); const rest=Math.max(0, st.sum - top.reduce((a,b)=>a+b,0)); const c6=$('chartPie'); pieChart(c6, [...top, rest]); bindTooltip(c6,(cv,x,y)=> insideSlice(cv,x,y));
+      const c7=$('chartDD'); lineChart(c7, st.ddSeries.map(v=>v*100), labels, 6); bindTooltip(c7,(cv,x,y)=> nearest(cv._points,x,y));
+      const c8=$('chartVol'); lineChart(c8, st.rollVol, labels, 7); bindTooltip(c8,(cv,x,y)=> nearest(cv._points,x,y));
+      const xs = conv.map(o=>o.year); const ys = st.yoy.map(v=>v*100); const c9=$('chartScatter'); scatterChart(c9, xs.slice(1), ys.slice(1), 8); bindTooltip(c9,(cv,x,y)=> nearest(cv._points,x,y));
+      const c10=$('chartLastVs'); barChart(c10, [lastVsAvg*100], [lang==='ar'?'الأخيرة مقابل المتوسط':'Last vs Avg'], 9); bindTooltip(c10,(cv,x,y)=> insideBar(cv._bars||[],x,y));
+
+      // quick helper
+      function nearest(points,x,y){ let m=null,d2=25; (points||[]).forEach(p=>{ const dd=(p.x-x)*(p.x-x)+(p.y-y)*(p.y-y); if(dd<d2){ m=p; d2=dd; } }); return m; }
+    }
+
+    // ============================== Wiring & boot ============================
+    function wire(){
+      $('langToggle').addEventListener('click',()=> setLang(lang==='en'?'ar':'en'));
+
+      const debounce=(fn,ms=120)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}};
+      $('total').addEventListener('input', debounce(()=>{ calc(); drawYearInsights(); save(); }));
+      $('inCur').addEventListener('change', ()=> setInputCurrency($('inCur').value));
+      $('outCur').addEventListener('change', ()=> setDisplayCurrency($('outCur').value));
+      $('inCurInsights').addEventListener('change', ()=> setInputCurrency($('inCurInsights').value));
+      $('outCurInsights').addEventListener('change', ()=> setDisplayCurrency($('outCurInsights').value));
+
+      $('openRates').addEventListener('click', ()=>{ updateRatesUI(); $('ratesModal').classList.add('open'); });
+      $('cancelRates').addEventListener('click', ()=>$('ratesModal').classList.remove('open'));
+      $('saveRates').addEventListener('click', ()=>{ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ exchangeRates[k]=parseFloat($(k.toLowerCase()+"Rate").value)||exchangeRates[k]; }); $('ratesModal').classList.remove('open'); save(); calc(); drawYearInsights(); });
+
+      $('refreshRatesInModal').addEventListener('click', fetchRates);
+
+      $('addRow').addEventListener('click', ()=>{ const y = years.length? (Math.max(...years.map(r=>r.year))+1) : (new Date().getFullYear()); years.push({year:y, value:0}); renderYears(); drawYearInsights(); save(); });
+      $('loadSample').addEventListener('click', ()=>{ years = [ {year:2020, value:8037}, {year:2021, value:11325}, {year:2022, value:17549}, {year:2023, value:13794}, {year:2024, value:10892}, {year:2025, value:11988}, ]; renderYears(); drawYearInsights(); save(); });
+
+      $('tabDash').addEventListener('click', ()=>{ $('tabDash').classList.add('active'); $('tabInsights').classList.remove('active'); $('panelDash').style.display='block'; $('panelInsights').style.display='none'; });
+      $('tabInsights').addEventListener('click', ()=>{ $('tabInsights').classList.add('active'); $('tabDash').classList.remove('active'); $('panelDash').style.display='none'; $('panelInsights').style.display='block'; drawYearInsights(); });
+
+      // Historical toggle (insights-only)
+      $('useHistFX')?.addEventListener('change',()=>{
+        useHistFX=$('useHistFX').checked;
+        save();
+        // double-draw to assert correctness after toggling on/off
+        drawYearInsights();
+        requestAnimationFrame(()=> drawYearInsights());
+      });
+
+      window.addEventListener('resize', debounce(()=> drawYearInsights(), 150));
+    }
+
+    function updateRatesUI(){ ['EGP','SAR','KWD','AED','EUR','GBP','QAR','OMR','BHD'].forEach(k=>{ $(k.toLowerCase()+"Rate").value = exchangeRates[k]; }); }
+
+    (function init(){
+      ['inCur','outCur','inCurInsights','outCurInsights'].forEach(id=>{ const el=$(id); if(!el) return; el.innerHTML = CURRENCIES.map(c=>`<option value="${c}">${c}</option>`).join(''); });
+      if(!$('inCur').value) $('inCur').value='USD';
+      if(!$('outCur').value) $('outCur').value='USD';
+      if($('inCurInsights') && !$('inCurInsights').value) $('inCurInsights').value=$('inCur').value;
+      if($('outCurInsights') && !$('outCurInsights').value) $('outCurInsights').value=$('outCur').value;
+
+      load();
+      applyI18n();
+      wire();
+      $('useHistFX') && ($('useHistFX').checked = !!useHistFX);
+      calc();
+      renderYears();
+      drawYearInsights();
+    })();
+  </script>
 </body>
 </html>
